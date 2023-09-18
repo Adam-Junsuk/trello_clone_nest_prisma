@@ -1,0 +1,107 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// // 사용자 관리
+// model Users {
+//   userId       Int      @id @default(autoincrement())
+//   username String
+//   password String
+//   email    String   @unique
+  
+//   Boards   Boards[]
+//   Cards    Cards[]
+//   Comments Comments[]
+//   BoardsUsers BoardUsers[]
+//   CardUsers   CardUsers[]
+//   @@map("Users")
+// }
+
+// 보드 관리
+model Boards {
+  boardId          Int      @id @default(autoincrement())
+  name        String
+  backgroundColor String
+  description String?
+ // CreatorId Int 
+
+//  Creator    Users  @relation(fields: [CreatorId], references: [userId])
+  Columns Columns[]
+//  BoardUsers BoardUsers[]
+  @@map("Boards")
+}
+
+// 보드와 사용자의 다대다 관계
+// model BoardUsers {
+//   BoardId Int
+// //  UserId  Int
+  
+//   Board   Boards @relation(fields: [BoardId], references: [boardId])
+// //  User    Users  @relation(fields: [UserId], references: [userId])
+
+//   @@id([BoardId, UserId])
+//   @@map("BoardUsers")
+// }
+
+// 컬럼 관리
+model Columns {
+  columnId      Int    @id @default(autoincrement())
+  name    String
+  order   Int
+  BoardId Int
+
+
+  Board   Boards  @relation(fields: [BoardId], references: [boardId])
+  Cards   Cards[]
+   @@map("Columns")
+}
+
+// 카드 관리
+model Cards {
+  cardId          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  color       String?
+  order       Int
+  ColumnId    Int
+  dueDate     DateTime? 
+  Column      Columns   @relation(fields: [ColumnId], references: [columnId])
+  
+//  Users       Users[]
+  Comments    Comments[]
+
+//  CardUsers   CardUsers[]
+  @@map("Cards")
+}
+
+// 카드와 사용자의 다대다 관계
+// model CardUsers {
+//   CardId Int
+//   UserId Int
+  
+//   Card   Cards @relation(fields: [CardId], references: [cardId])
+//   User   Users @relation(fields: [UserId], references: [userId])
+
+//   @@id([CardId, UserId])
+//    @@map("CardUsers")
+// }
+
+// 댓글 관리
+model Comments {
+  commentId      Int    @id @default(autoincrement())
+  content String
+//  userId  Int
+  cardId  Int
+
+
+//  User    Users   @relation(fields: [userId], references: [userId])
+  Card    Cards   @relation(fields: [cardId], references: [cardId])
+   @@map("Comments")
+}
+
