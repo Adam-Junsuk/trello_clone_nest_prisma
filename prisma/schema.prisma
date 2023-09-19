@@ -104,4 +104,3 @@ model Comments {
   Card    Cards   @relation(fields: [cardId], references: [cardId])
    @@map("Comments")
 }
-
