@@ -15,6 +15,5 @@ import { AppService } from './app.service';
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, BoardsService],
-  exports: [PrismaService],
 })
 export class AppModule {}
