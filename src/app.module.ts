@@ -4,22 +4,17 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { PrismaService } from './prisma.service'; // 추가
 import { BoardsModule } from './boards/boards.module';
-import { ColumnsModule } from './columns/columns.module';
-import { CardsModule } from './cards/cards.module';
-import { CommentsModule } from './comments/comments.module';
-import { UsersModule } from './users/users.module';
+import { BoardsService } from './boards/boards.service';
+import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     BoardsModule,
-    ColumnsModule,
-    CardsModule,
-    CommentsModule,
-    UsersModule,
   ],
   controllers: [AppController],
-  providers: [PrismaService],
+  providers: [AppService, PrismaService, BoardsService],
+  exports: [PrismaService],
 })
 export class AppModule {}
