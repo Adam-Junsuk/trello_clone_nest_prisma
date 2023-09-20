@@ -6,9 +6,9 @@ import { Prisma } from '@prisma/client';
 export class BoardsService {
   constructor(private prisma: PrismaService) {}
 
-  async board(postWhereUniqueInput: Prisma.BoardsWhereUniqueInput) {
+  async board(boardWhereUniqueInput: Prisma.BoardsWhereUniqueInput) {
     return this.prisma.boards.findUnique({
-      where: postWhereUniqueInput,
+      where: boardWhereUniqueInput,
     });
   }
 

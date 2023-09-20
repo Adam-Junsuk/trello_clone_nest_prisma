@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
-//import { DeleteBoardDto } from './dto/delete-board.dto';
+//import { DeleteBoardDto } from './dto/delete-board.dto';!!
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -40,11 +40,12 @@ export class BoardsController {
   @ApiResponse({ status: 500, description: '서버에러' })
   async createBoard(@Body() data: CreateBoardDto) {
     const { name, backgroundColor, description } = data;
-    return this.boardsService.createBoard({
+    await this.boardsService.createBoard({
       name,
       backgroundColor,
       description,
     });
+    return { message: '보드가 생성되었습니다.' };
   }
 
   @ApiTags('보드 수정')
@@ -59,10 +60,11 @@ export class BoardsController {
     @Body() data: UpdateBoardDto,
   ) {
     const { name, backgroundColor, description } = data;
-    return this.boardsService.updateBoard({
+    await this.boardsService.updateBoard({
       where: { boardId: Number(boardId) },
       data: { name, backgroundColor, description },
     });
+    return { message: '보드가 수정되었습니다.' };
   }
 
   @ApiTags('보드삭제')
@@ -72,6 +74,7 @@ export class BoardsController {
   @ApiResponse({ status: 404, description: '존재하지 않는 Board입니다.' })
   @ApiResponse({ status: 500, description: '서버에러.' })
   async deleteBoard(@Param('boardId') boardId: number) {
-    return this.boardsService.deleteBoard({ boardId: Number(boardId) });
+    await this.boardsService.deleteBoard({ boardId: Number(boardId) });
+    return { message: '보드가 삭제되었습니다.' };
   }
 }
