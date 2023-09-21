@@ -70,7 +70,7 @@ export class UsersController {
   }
 
   // 민정님 코드
-  // @Patch(':id')
+  // @Put(':id')
   // async update(@Param('id') userId: number, @Body() data: UpdateUserDto) {
   //   const { username, password, email } = data;
   //   await this.usersService.update({

@@ -8,12 +8,19 @@ import {
   Delete,
   NotFoundException,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ColumnsService } from './columns.service';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ColumnEntity } from './entities/column.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('columns')
 @ApiTags('columns')
@@ -21,6 +28,8 @@ export class ColumnsController {
   constructor(private readonly columnsService: ColumnsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity })
   async create(@Body() createColumnDto: CreateColumnDto) {
     const columnEntity = new ColumnEntity(
@@ -34,6 +43,8 @@ export class ColumnsController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity, isArray: true })
   async findAll() {
     const columns = await this.columnsService.findAll();
@@ -41,6 +52,8 @@ export class ColumnsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ColumnEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const columnEntity = new ColumnEntity(
@@ -54,6 +67,8 @@ export class ColumnsController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity })
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -71,6 +86,8 @@ export class ColumnsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ColumnEntity })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const column = this.columnsService.findOne(id);

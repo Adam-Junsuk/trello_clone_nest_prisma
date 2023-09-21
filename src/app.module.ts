@@ -10,12 +10,21 @@ import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 import { ColumnsModule } from './columns/columns.module';
 import { AuthModule } from './auth/auth.module';
+// import { RedisModule } from 'nestjs-redis';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    // RedisModule.register({
+    //   url: process.env.REDIS_URL,
+    // }),
+    // RedisModule.forRootAsync({
+    //   useFactory: () => ({
+    //     url: process.env.REDIS_URL,
+    //   }),
+    // }),
     UsersModule,
     BoardsModule,
     CardsModule,

@@ -36,6 +36,8 @@ export class ColumnsService {
           },
         },
       });
+      // 1:n = user:columns : 한명의 유저가 여러개의 컬럼을 만들수 있다. 컬럼은 여러명의 유저에 소속될수없다 (한명에 의해서만 만들어질 수 있다.)
+      // n:n = users:boards: 여러명의 유저가 여러개의 보드를 만들수 있다. 보드는 여러명의 유저가 소속된다.
       return column;
     } else {
       throw new Error('boardId is undefined');
