@@ -1,25 +1,39 @@
 import { ApiProperty } from '@nestjs/swagger';
-
+import {
+  IsString,
+  MaxLength,
+  MinLength,
+  IsNumber,
+  IsNotEmpty,
+} from 'class-validator';
 export class CreateColumnDto {
   @ApiProperty({
     example: 'New Column',
   })
-  name: string;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(1)
+  @MaxLength(30)
+  readonly name: string;
 
   @ApiProperty({
     example: 1,
   })
-  order: number;
+  @IsNumber()
+  readonly order: number;
 
   @ApiProperty({
     example: 1,
   })
-  boardId: number;
+  @IsNumber()
+  @IsNotEmpty()
+  readonly boardId: number;
 
   @ApiProperty({
     example: 1,
   })
-  userId: number;
+  @IsNumber()
+  readonly userId: number;
 
   @ApiProperty({
     example: new Date(),

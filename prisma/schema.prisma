@@ -10,16 +10,18 @@ generator client {
 // 사용자 관리
 model Users {
   userId       Int      @id @default(autoincrement())
-  username String
+  username String?
   password String
   email    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
   
   Boards   Boards[]
+  Columns  Columns[]
   Cards    Cards[]
   Comments Comments[]
   BoardsUsers BoardUsers[]
+  ColumnsUsers ColumnUsers[]
   CardUsers   CardUsers[]
   @@map("Users")
 }
@@ -60,12 +62,29 @@ model Columns {
   name    String
   order   Int
   BoardId Int
+  CreatorId Int?
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
 
+  
   Board   Boards  @relation(fields: [BoardId], references: [boardId])
+  Creator    Users?  @relation(fields: [CreatorId], references: [userId])
   Cards   Cards[]
+  ColumnUsers ColumnUsers[]
   @@map("Columns")
+}
+
+model ColumnUsers {
+  ColumnId Int
+  UserId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  Column   Columns @relation(fields: [ColumnId], references: [columnId])
+  User   Users @relation(fields: [UserId], references: [userId])
+
+  @@id([ColumnId, UserId])
+  @@map("ColumnUsers")
 }
 
 // 카드 관리

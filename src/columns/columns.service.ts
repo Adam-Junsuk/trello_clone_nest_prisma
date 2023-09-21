@@ -2,10 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @Injectable()
-@ApiTags('columns')
 export class ColumnsService {
   constructor(private prisma: PrismaService) {}
 
@@ -13,25 +11,41 @@ export class ColumnsService {
   // api/boards/:boardId/columns
   // { "name": "New Column", "order": 1, "boardId": 1 }
   async create(createColumnDto: CreateColumnDto) {
-    const { name, order, boardId } = createColumnDto;
-    const column = await this.prisma.columns.create({
-      data: {
-        name,
-        order,
-        Board: {
-          connect: {
-            boardId,
+    const { name, order, boardId, userId } = createColumnDto;
+    console.log('createColumnDto:', createColumnDto);
+    console.log('boardId:', boardId);
+
+    if (!boardId || !userId) {
+      throw new Error('boardId or userId is undefined or null');
+    }
+
+    if (boardId !== undefined) {
+      const column = await this.prisma.columns.create({
+        data: {
+          name,
+          order,
+          Board: {
+            connect: {
+              boardId,
+            },
+          },
+          Creator: {
+            connect: {
+              userId,
+            },
           },
         },
-      },
-    });
-    return column;
+      });
+      return column;
+    } else {
+      throw new Error('boardId is undefined');
+    }
   }
 
   // return all columns
   // api/boards/:boardId/columns
-  findAll() {
-    return this.prisma.columns.findMany();
+  async findAll() {
+    return await this.prisma.columns.findMany();
   }
 
   // return a single column
@@ -39,6 +53,10 @@ export class ColumnsService {
   async findOne(id: number) {
     return await this.prisma.columns.findUnique({
       where: { columnId: id },
+      include: {
+        Creator: true,
+        Board: true,
+      },
     });
   }
   // update a column
@@ -47,6 +65,7 @@ export class ColumnsService {
     const { name, order } = updateColumnDto;
     return await this.prisma.columns.update({
       where: { columnId: id },
+      // where: { Prisma.ColumnWhereUniqueInput} ,
       data: {
         name,
         order,
