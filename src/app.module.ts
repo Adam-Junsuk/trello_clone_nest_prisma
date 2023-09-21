@@ -9,6 +9,7 @@ import { CommentsModule } from './comments/comments.module';
 import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 import { ColumnsModule } from './columns/columns.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ColumnsModule } from './columns/columns.module';
     CommentsModule,
     UsersModule,
     ColumnsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [PrismaService, AppService],
