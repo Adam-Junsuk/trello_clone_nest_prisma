@@ -8,20 +8,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// // 사용자 관리
-// model Users {
-//   userId       Int      @id @default(autoincrement())
-//   username String
-//   password String
-//   email    String   @unique
+// 사용자 관리
+model Users {
+  userId       Int      @id @default(autoincrement())
+  username String
+  password String
+  email    String   @unique
+  signupVerifyToken String? @unique
   
-//   Boards   Boards[]
-//   Cards    Cards[]
-//   Comments Comments[]
-//   BoardsUsers BoardUsers[]
-//   CardUsers   CardUsers[]
-//   @@map("Users")
-// }
+  Boards   Boards[]
+  Cards    Cards[]
+  Comments Comments[]
+  BoardsUsers BoardUsers[]
+  CardUsers   CardUsers[]
+  @@map("Users")
+}
 
 // 보드 관리
 model Boards {
@@ -29,25 +30,25 @@ model Boards {
   name        String
   backgroundColor String
   description String?
- // CreatorId Int 
+ CreatorId Int 
 
-//  Creator    Users  @relation(fields: [CreatorId], references: [userId])
+ Creator    Users  @relation(fields: [CreatorId], references: [userId])
   Columns Columns[]
-//  BoardUsers BoardUsers[]
+ BoardUsers BoardUsers[]
   @@map("Boards")
 }
 
 // 보드와 사용자의 다대다 관계
-// model BoardUsers {
-//   BoardId Int
-// //  UserId  Int
+model BoardUsers {
+  BoardId Int
+ UserId  Int
   
-//   Board   Boards @relation(fields: [BoardId], references: [boardId])
-// //  User    Users  @relation(fields: [UserId], references: [userId])
+  Board   Boards @relation(fields: [BoardId], references: [boardId])
+ User    Users  @relation(fields: [UserId], references: [userId])
 
-//   @@id([BoardId, UserId])
-//   @@map("BoardUsers")
-// }
+  @@id([BoardId, UserId])
+  @@map("BoardUsers")
+}
 
 // 컬럼 관리
 model Columns {
@@ -73,34 +74,34 @@ model Cards {
   dueDate     DateTime? 
   Column      Columns   @relation(fields: [ColumnId], references: [columnId])
   
-//  Users       Users[]
+ Users       Users[]
   Comments    Comments[]
 
-//  CardUsers   CardUsers[]
+ CardUsers   CardUsers[]
   @@map("Cards")
 }
 
 // 카드와 사용자의 다대다 관계
-// model CardUsers {
-//   CardId Int
-//   UserId Int
+model CardUsers {
+  CardId Int
+  UserId Int
   
-//   Card   Cards @relation(fields: [CardId], references: [cardId])
-//   User   Users @relation(fields: [UserId], references: [userId])
+  Card   Cards @relation(fields: [CardId], references: [cardId])
+  User   Users @relation(fields: [UserId], references: [userId])
 
-//   @@id([CardId, UserId])
-//    @@map("CardUsers")
-// }
+  @@id([CardId, UserId])
+   @@map("CardUsers")
+}
 
 // 댓글 관리
 model Comments {
   commentId      Int    @id @default(autoincrement())
   content String
-//  userId  Int
+ userId  Int
   cardId  Int
 
 
-//  User    Users   @relation(fields: [userId], references: [userId])
+ User    Users   @relation(fields: [userId], references: [userId])
   Card    Cards   @relation(fields: [cardId], references: [cardId])
    @@map("Comments")
 }
