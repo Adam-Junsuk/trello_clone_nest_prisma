@@ -9,6 +9,7 @@ import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     BoardsModule,
     PrismaModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

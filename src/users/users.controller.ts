@@ -15,7 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 //import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginRequsetDto } from 'src/auth/dto/login.request.dto';
 import { AuthService } from 'src/auth/auth.service';
 
 @Controller()
@@ -35,28 +35,7 @@ export class UsersController {
 
   @ApiTags('로그인')
   @Post('auth/login')
-  async login(@Body() data: LoginUserDto) {
+  async login(@Body() data: LoginRequsetDto) {
     return await this.authService.jwtLogin(data);
   }
-
-  //   @ApiTags('사용자 정보 수정')
-  //   @Put('users/:userId')
-  //   async updateBoard(
-  //     @Param('userId') userId: number,
-  //     @Body() data: UpdateUserDto,
-  //   ) {
-  //     const { username, email } = data;
-  //     const user = await this.usersService.user({ boardId: Number(boardId) });
-  //     if (!user) throw new HttpException('사용자가 존재하지 않습니다..', 404);
-  //     await this.usersService.updateUser({
-  //       where: { userId: Number(userId) },
-  //       data: { username, email },
-  //     });
-  //     return { message: '사용자 정보가 수정되었습니다.' };
-  //   }
-  //   @ApiTags('로그아웃')
-  //   @Post('users/logout')
-  //   async logoutUser() {
-  //     return { message: 'sucess' };
-  //   }
 }

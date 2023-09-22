@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { LoginRequsetDto } from './dto/login.request.dto';
 import * as bcrypt from 'bcrypt';
 //이메일, 패스워드에 대한 유효성검증이 완료되면 jwt토큰을 보내주기
 @Injectable()
@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService, //auth모듈에서 jwt모듈을 임포트했으니 그안에 있는거 사용
   ) {}
 
-  async jwtLogin(data: LoginUserDto) {
+  async jwtLogin(data: LoginRequsetDto) {
     const { email, password } = data;
 
     //해당 이메일 존재하는지 체크

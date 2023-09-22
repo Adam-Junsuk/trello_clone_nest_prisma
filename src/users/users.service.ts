@@ -13,11 +13,14 @@ export class UsersService {
 
   async createUser(data: CreateUserDto) {
     //이메일, 패스워드, 등 데이터 들어오는거 유효성검사 수행, 패스워드 암호화, db에 저장
+    console.log(data);
     const { username, password, email } = data;
-    const isUserExist = await this.prisma.users.findFirst({
-      where: { username: username },
+    console.log(email);
+    const isUserExist = await this.prisma.users.findUnique({
+      where: { email: email },
     });
-    if (!isUserExist) throw new UnauthorizedException('중복된 이메일 입니다.'); //httpexception, 403이랑 같음
+    console.log('is ', isUserExist);
+    if (isUserExist) throw new UnauthorizedException('중복된 이메일 입니다.'); //httpexception, 403이랑 같음
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
