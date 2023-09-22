@@ -11,6 +11,13 @@ export class BoardsService {
   async board(boardId: string) {
     return this.prisma.boards.findUnique({
       where: { boardId: +boardId },
+      include: {
+        Columns: {
+          include: {
+            Cards: true,
+          },
+        },
+      },
     });
   }
 
