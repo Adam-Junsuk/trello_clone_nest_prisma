@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { CreateBoardDto } from './dto/create-board.dto';
 
 @Injectable()
 export class BoardsService {
@@ -21,9 +22,14 @@ export class BoardsService {
     });
   }
 
-  async createBoard(data: Prisma.BoardsCreateInput) {
+  async createBoard(data: CreateBoardDto, userId) {
     return this.prisma.boards.create({
-      data,
+      data: {
+        CreatorId: userId,
+        name: data.name,
+        backgroundColor: data.backgroundColor,
+        description: data.description,
+      },
     });
   }
 
