@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -15,4 +15,16 @@ export class AppController {
   googleAuthRedirect(@Req() req){
     return this.appService.googleLogin(req)
   }
+
+  @Get('index')
+  @Render('index')
+  root() {
+    return { message: 'Hello SeongMin' };
   }
+
+  @Get('login')
+  @Render('login')
+  login() {
+    return;
+  }
+}
