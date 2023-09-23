@@ -1,5 +1,6 @@
 .env
 .node_modules
+docker-compose.yml
 
 # compiled output
 /dist
