@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // /*TODO: Error나면 transform:true 부분을 확인/
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   //   app.useGlobalPipes(new ValidationPipe({ transform: true })); // minjung's code
-  
+
   const config = new DocumentBuilder()
     .setTitle('Trello Clone API')
     .setDescription('The Trello Clone API description')
