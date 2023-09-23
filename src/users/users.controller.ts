@@ -1,3 +1,4 @@
+// trello_clone_nest_prisma/src/users/users.controller.ts
 import {
   Controller,
   Get,
@@ -8,6 +9,7 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  Render,
   // UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -30,6 +32,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  // @Render('user-create')
   @ApiCreatedResponse({
     type: UserEntity,
     description: 'The user has been successfully created.',
@@ -39,6 +42,7 @@ export class UsersController {
   }
 
   @Get()
+  // @Render('users-list')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: [UserEntity] })
