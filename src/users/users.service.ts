@@ -1,5 +1,4 @@
 // users.service.ts
-
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -66,19 +65,6 @@ export class UsersService {
       // data: updateUserDto,
     });
   }
-
-  // 민정님 코드
-  // async update(params: {
-  //   where: Prisma.UsersWhereUniqueInput;
-  //   data: Prisma.UsersUpdateInput;
-  // }) {
-  //   const { data, where } = params;
-  //   return this.prisma.users.update({
-  //     data,
-  //     where,
-  //   });
-  // }
-
   async remove(id: number) {
     const user = await this.prisma.users.findUnique({ where: { userId: id } });
     if (!user) {
@@ -87,3 +73,45 @@ export class UsersService {
     return this.prisma.users.delete({ where: { userId: id } });
   }
 }
+
+// minjung's code start
+//   async createUser(data: CreateUserDto) {
+//     //이메일, 패스워드, 등 데이터 들어오는거 유효성검사 수행, 패스워드 암호화, db에 저장
+//     console.log(data);
+//     const { username, password, email } = data;
+//     console.log(email);
+//     const isUserExist = await this.prisma.users.findUnique({
+//       where: { email: email },
+//     });
+//     console.log('is ', isUserExist);
+//     if (isUserExist) throw new UnauthorizedException('중복된 이메일 입니다.'); //httpexception, 403이랑 같음
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     return await this.prisma.users.create({
+//       data: {
+//         username,
+//         password: hashedPassword,
+//         email,
+//       },
+//       select: {
+//         userId: true,
+//         username: true,
+//         email: true,
+//         createdAt: true,
+//         updatedAt: true,
+//       },
+//     });
+//   }
+
+//   async findUserByEmail(email: string) {
+//     const user = await this.prisma.users.findFirst({ where: { email: email } });
+//     return user;
+//   }
+
+//   async findUserById(id: number) {
+//     const user = await this.prisma.users.findUnique({ where: { userId: id } });
+//     return user;
+//   }
+// }
+// minjung's code end

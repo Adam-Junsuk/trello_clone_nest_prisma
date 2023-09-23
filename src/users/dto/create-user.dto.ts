@@ -22,4 +22,23 @@ export class CreateUserDto {
   @IsEmail()
   @MinLength(4)
   readonly email: string;
+
+// minjung's code start
+// export class CreateUserDto {
+//   @ApiProperty()
+//   @IsString()
+//   @IsNotEmpty()
+//   readonly username: string;
+
+//   @ApiProperty()
+//   @IsString()
+//   @IsNotEmpty()
+//   @MinLength(10)
+//   readonly password: string;
+
+//   @ApiProperty()
+//   @IsEmail()
+//   @IsNotEmpty()
+//   readonly email: string;
+  // minjung's code end
 }
