@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CardDto } from './dto/cards.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Cards')
 @Controller('columns/:columnId/cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}

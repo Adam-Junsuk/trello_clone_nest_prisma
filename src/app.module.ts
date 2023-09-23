@@ -11,6 +11,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
+import { LoggingModule } from './logging/logging.module';
 import emailConfig from './config/emailConfig';
 
 @Module({
@@ -28,6 +29,7 @@ import emailConfig from './config/emailConfig';
     UsersModule,
     EmailModule,
     AuthModule,
+    LoggingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

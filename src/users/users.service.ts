@@ -1,3 +1,4 @@
+import { Response } from 'express';
 import {
   Injectable,
   NotFoundException,
@@ -31,9 +32,8 @@ export class UsersService {
         email,
         signupVerifyToken,
       );
-      console.log('이메일 발송 완료');
     } catch (error) {
-      throw new InternalServerErrorException('이메일 발송 실패');
+      throw new InternalServerErrorException('Email sending failed');
     }
 
     try {
@@ -83,7 +83,7 @@ export class UsersService {
     });
   }
 
-  async login(email: string, password: string): Promise<string> {
+  async login(res: Response, email: string, password: string): Promise<void> {
     const user = await this.prisma.users.findUnique({
       where: { email, password },
     });
@@ -96,11 +96,14 @@ export class UsersService {
       throw new InternalServerErrorException('JWT_SECRET is not defined');
     }
 
-    return this.authService.login({
+    const token = this.authService.login({
       id: user.userId,
       username: user.username,
       email: user.email,
     });
+    res.setHeader('Authorization', `Bearer ${token}`);
+    res.send({ message: 'login successful' });
+    res.cookie('Authorization', `Bearer ${token}`);
   }
 
   async getUserInfo(userId: string) {
@@ -110,7 +113,11 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return {
+      userId: user.userId,
+      username: user.username,
+      email: user.email,
+    };
   }
 
   async removeUser(userId: string) {
