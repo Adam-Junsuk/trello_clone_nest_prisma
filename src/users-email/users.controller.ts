@@ -19,8 +19,8 @@ import { VerifyEmailDto } from './dto/verify-token.dto';
 import { UserLoginDto } from './dto/login.dto';
 import { UserInfo } from './dto/user-info.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { AuthService } from './../auth/auth.service';
+import { AuthGuard } from 'src/auth-email/auth.guard';
+import { AuthService } from '../auth-email/auth.service';
 import { Response } from 'express';
 
 @Controller('users')

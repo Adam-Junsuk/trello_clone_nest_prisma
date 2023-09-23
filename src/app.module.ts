@@ -6,11 +6,11 @@ import { BoardsModule } from './boards/boards.module';
 import { ColumnsModule } from './columns/columns.module';
 import { CardsModule } from './cards/cards.module';
 import { CommentsModule } from './comments/comments.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './users-email/users.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth-email/auth.module';
 import { LoggingModule } from './logging/logging.module';
 import emailConfig from './config/emailConfig';
 

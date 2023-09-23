@@ -9,7 +9,7 @@ import { EmailService } from 'src/email/email.service';
 import { PrismaService } from '../prisma.service';
 import * as uuid from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from './../auth/auth.service';
+import { AuthService } from '../auth-email/auth.service';
 
 @Injectable()
 export class UsersService {
