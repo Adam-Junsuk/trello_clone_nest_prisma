@@ -17,12 +17,12 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 import { HttpExceptionFilter } from 'src/http-exception.filter'; // minjung's
-
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
@@ -31,6 +31,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiOperation({ summary: '회원가입' })
   @ApiCreatedResponse({
     type: UserEntity,
     description: 'The user has been successfully created.',

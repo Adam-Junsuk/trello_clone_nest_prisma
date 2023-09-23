@@ -13,13 +13,12 @@ import {
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
-//import { DeleteBoardDto } from './dto/delete-board.dto';!!
 import { UpdateBoardDto } from './dto/update-board.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/auth-basic/auth.service';
 import { Users } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 
 interface RequestWithUser extends Request {
   user: Users;

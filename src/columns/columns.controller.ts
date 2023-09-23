@@ -1,3 +1,5 @@
+// trello_clone_nest_prisma/src/columns/columns.controller.ts
+
 import {
   Controller,
   Get,
@@ -20,7 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ColumnEntity } from './entities/column.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 
 @Controller('columns')
 @ApiTags('columns')
