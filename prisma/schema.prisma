@@ -9,129 +9,138 @@ generator client {
 
 // 사용자 관리
 model Users {
-  userId       Int      @id @default(autoincrement())
-  username String?
-  password String
-  email    String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-  signupVerifyToken String? @unique
-  
-  Boards   Boards[]
-  Columns  Columns[]
-  Cards    Cards[]
-  Comments Comments[]
-  BoardsUsers BoardUsers[]
+  userId            Int       @id @default(autoincrement())
+  username          String?
+  password          String
+  email             String    @unique
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime? @updatedAt
+  signupVerifyToken String?   @unique
+
+  Boards       Boards[]
+  Columns      Columns[]
+  Cards        Cards[]
+  Comments     Comments[]
+  BoardsUsers  BoardUsers[]
   ColumnsUsers ColumnUsers[]
-  CardUsers   CardUsers[]
+  CardUsers    CardUsers[]
+
   @@map("Users")
 }
 
-
-// 보드 관리
 model Boards {
-  boardId          Int      @id @default(autoincrement())
-  name        String
+  boardId         Int       @id @default(autoincrement())
+  CreatorId       Int
+  name            String
   backgroundColor String
-  description String?
-  CreatorId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
+  description     String?
+  CreatorId       Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
 
-  Creator    Users  @relation(fields: [CreatorId], references: [userId])
-  Columns Columns[]
+  Creator    Users        @relation(fields: [CreatorId], references: [userId])
+  Columns    Columns[]
   BoardUsers BoardUsers[]
+
   @@map("Boards")
 }
 
 // 보드와 사용자의 다대다 관계
 model BoardUsers {
-  BoardId Int
-  UserId  Int
+  BoardId   Int
+  UserId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  Board   Boards @relation(fields: [BoardId], references: [boardId])
-  User    Users  @relation(fields: [UserId], references: [userId])
+
+  Board Boards @relation(fields: [BoardId], references: [boardId])
+  User  Users  @relation(fields: [UserId], references: [userId])
 
   @@id([BoardId, UserId])
   @@map("BoardUsers")
 }
 
-// 컬럼 관리
+@@id([BoardId, UserId])
+@@map("BoardUsers")
+}
+
 model Columns {
-  columnId      Int    @id @default(autoincrement())
-  name    String
-  order   Int
-  BoardId Int
+  columnId  Int       @id @default(autoincrement())
+  name      String
+  order     Int
+  BoardId   Int
   CreatorId Int?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-
-  Board   Boards  @relation(fields: [BoardId], references: [boardId])
-  Creator    Users?  @relation(fields: [CreatorId], references: [userId])
-  Cards   Cards[]
+  Board       Boards        @relation(fields: [BoardId], references: [boardId])
+  Creator     Users?        @relation(fields: [CreatorId], references: [userId])
+  Cards       Cards[]
   ColumnUsers ColumnUsers[]
+
   @@map("Columns")
 }
 
 model ColumnUsers {
-  ColumnId Int
-  UserId Int
+  ColumnId  Int
+  UserId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  Column   Columns @relation(fields: [ColumnId], references: [columnId])
-  User   Users @relation(fields: [UserId], references: [userId])
+
+  Column Columns @relation(fields: [ColumnId], references: [columnId])
+  User   Users   @relation(fields: [UserId], references: [userId])
 
   @@id([ColumnId, UserId])
   @@map("ColumnUsers")
 }
 
-// 카드 관리
 model Cards {
-  cardId          Int      @id @default(autoincrement())
+  cardId      Int       @id @default(autoincrement())
+  ColumnId    Int
   name        String
   description String?
   color       String?
   order       Int
-  ColumnId    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  dueDate     DateTime? 
-  Column      Columns   @relation(fields: [ColumnId], references: [columnId])
-  
-  Users       Users[]
-  Comments    Comments[]
-  CardUsers   CardUsers[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  dueDate     DateTime?
+  Column      Columns   @relation(fields: [ColumnId], references: [columnId], onDelete: Cascade)
+
+  Users     Users[]
+  Comments  Comments[]
+  CardUsers CardUsers[]
+
   @@map("Cards")
 }
 
 // 카드와 사용자의 다대다 관계
 model CardUsers {
-  CardId Int
-  UserId Int
+  CardId    Int
+  UserId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  Card   Cards @relation(fields: [CardId], references: [cardId])
-  User   Users @relation(fields: [UserId], references: [userId])
+
+  Card Cards @relation(fields: [CardId], references: [cardId])
+  User Users @relation(fields: [UserId], references: [userId])
 
   @@id([CardId, UserId])
   @@map("CardUsers")
 }
 
-// 댓글 관리
 model Comments {
-  commentId      Int    @id @default(autoincrement())
-  content String
-    UserId  Int
-  CardId  Int
+  commentId Int      @id @default(autoincrement())
+  content   String
+  UserId    Int
+  CardId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  User    Users   @relation(fields: [UserId], references: [userId])
-  Card    Cards   @relation(fields: [CardId], references: [cardId])
+  User Users @relation(fields: [UserId], references: [userId])
+  Card Cards @relation(fields: [CardId], references: [cardId], onDelete: Cascade)
+
   @@map("Comments")
+}
+
+enum Role {
+  CLIENT
+  ADMIN
 }
