@@ -1,14 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
+//import { Prisma } from '@prisma/client';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
 
 @Injectable()
 export class BoardsService {
   constructor(private prisma: PrismaService) {}
 
-  async board(postWhereUniqueInput: Prisma.BoardsWhereUniqueInput) {
+  async board(boardId: string) {
     return this.prisma.boards.findUnique({
-      where: postWhereUniqueInput,
+      where: { boardId: +boardId },
+      include: {
+        Columns: {
+          include: {
+            Cards: true,
+          },
+        },
+      },
     });
   }
 
@@ -21,26 +30,32 @@ export class BoardsService {
     });
   }
 
-  async createBoard(data: Prisma.BoardsCreateInput) {
+  async createBoard(userId: number, data: CreateBoardDto) {
     return this.prisma.boards.create({
-      data,
+      data: {
+        CreatorId: userId,
+        name: data.name,
+        backgroundColor: data.backgroundColor,
+        description: data.description,
+      },
     });
   }
 
-  async updateBoard(params: {
-    where: Prisma.BoardsWhereUniqueInput;
-    data: Prisma.BoardsUpdateInput;
-  }) {
-    const { data, where } = params; //data에 { published: true }, where에  { id: Number(id) }들어감
+  async updateBoard(boardId: string, data: UpdateBoardDto) {
+    //data에 { published: true }, where에  { id: Number(id) }들어감
     return this.prisma.boards.update({
-      data,
-      where,
+      data: {
+        name: data.name,
+        backgroundColor: data.backgroundColor,
+        description: data.description,
+      },
+      where: { boardId: +boardId },
     });
   }
 
-  async deleteBoard(where: Prisma.BoardsWhereUniqueInput) {
+  async deleteBoard(boardId: string) {
     return this.prisma.boards.delete({
-      where,
+      where: { boardId: +boardId },
     });
   }
 }
