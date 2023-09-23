@@ -1,24 +1,23 @@
-// app.module.ts
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { PrismaService } from './prisma/prisma.service';
 import { BoardsModule } from './boards/boards.module';
 import { CardsModule } from './cards/cards.module';
 import { CommentsModule } from './comments/comments.module';
+import { CommentsService } from './comments/comments.service';
 import { NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users-email/users.module';
-
 import { ColumnsModule } from './columns/columns.module';
 import { AuthModule } from './auth/auth.module';
-
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
 import { AuthModule as Emodule } from './auth-email/auth.module';
 import { LoggingModule } from './logging/logging.module';
 import emailConfig from './config/emailConfig';
+import { PrismaService } from './prisma/prisma.service';
+import { GoogleStrategy } from './users/auth/google-auth.strategy';
 
 @Module({
   imports: [
@@ -41,7 +40,7 @@ import emailConfig from './config/emailConfig';
     LoggingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [PrismaService, AppService, CommentsService, GoogleStrategy],
 })
 export class AppModule implements NestModule {
   //로거미들웨어적용
