@@ -1,3 +1,5 @@
+// trello_clone_nest_prisma/src/columns/columns.service.ts
+
 import { Injectable } from '@nestjs/common';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
