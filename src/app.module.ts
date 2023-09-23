@@ -6,34 +6,33 @@ import { PrismaService } from './prisma/prisma.service';
 import { BoardsModule } from './boards/boards.module';
 import { CardsModule } from './cards/cards.module';
 import { CommentsModule } from './comments/comments.module';
+import { NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from './logger/logger.middleware';
+import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AppService } from './app.service';
 import { ColumnsModule } from './columns/columns.module';
 import { AuthModule } from './auth/auth.module';
-// import { RedisModule } from 'nestjs-redis';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // RedisModule.register({
-    //   url: process.env.REDIS_URL,
-    // }),
-    // RedisModule.forRootAsync({
-    //   useFactory: () => ({
-    //     url: process.env.REDIS_URL,
-    //   }),
-    // }),
+    PrismaModule,
+    AuthModule,
     UsersModule,
     BoardsModule,
+    ColumnsModule,
     CardsModule,
     CommentsModule,
-    UsersModule,
-    ColumnsModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [PrismaService, AppService],
-})
-export class AppModule {}
+}) 
+
+export class AppModule implements NestModule { //로거미들웨어적용
+  configure(consumer: MiddlewareConsumer) { //모듈 데코레이터에는 미들웨어를 위한 장소가 없으므로 configure모듈 클래스의 메서드 사용하여 설정
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

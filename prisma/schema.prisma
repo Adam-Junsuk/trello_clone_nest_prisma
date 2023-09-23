@@ -66,7 +66,7 @@ model Columns {
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
 
-  
+
   Board   Boards  @relation(fields: [BoardId], references: [boardId])
   Creator    Users?  @relation(fields: [CreatorId], references: [userId])
   Cards   Cards[]
@@ -133,4 +133,3 @@ model Comments {
   Card    Cards   @relation(fields: [CardId], references: [cardId])
   @@map("Comments")
 }
-

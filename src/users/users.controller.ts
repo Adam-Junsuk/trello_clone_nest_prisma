@@ -6,9 +6,9 @@ import {
   Put,
   Param,
   Delete,
+  UseFilters,
   ParseIntPipe,
   UseGuards,
-  // UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,11 +20,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-// import { RemovePasswordInterceptor } from 'src/utils/remove-password.interceptor';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { HttpExceptionFilter } from 'src/http-exception.filter'; // minjung's
+
 
 @Controller('users')
-// @UseInterceptors(RemovePasswordInterceptor)
+@UseFilters(HttpExceptionFilter)
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -69,21 +70,35 @@ export class UsersController {
     return new UserEntity(await this.usersService.update(id, updateUserDto));
   }
 
-  // 민정님 코드
-  // @Put(':id')
-  // async update(@Param('id') userId: number, @Body() data: UpdateUserDto) {
-  //   const { username, password, email } = data;
-  //   await this.usersService.update({
-  //     where: { userId: Number(userId) },
-  //     data: { username, password, email },
-  //   });
-  //   return { message: '유저가 수정되었습니다.' };
-  // }
-
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async remove(@Param('id', ParseIntPipe) id: number) {
     return new UserEntity(await this.usersService.remove(id));
+
+
+// --Minjung's Code Start
+// import { LoginRequsetDto } from 'src/auth/dto/login.request.dto';
+// import { AuthService } from 'src/auth/auth.service';
+
+// @Controller()
+// export class UsersController {
+//   constructor(
+//     private readonly usersService: UsersService,
+//     private readonly authService: AuthService,
+//   ) {}
+
+//   @ApiTags('회원 가입')
+//   @Post('auth/signup')
+//   async creatUser(@Body() data: CreateUserDto) {
+//     await this.usersService.createUser(data);
+//     return { message: '회원가입이 완료되었습니다.' };
+//   }
+
+//   @ApiTags('로그인')
+//   @Post('auth/login')
+//   async login(@Body() data: LoginRequsetDto) {
+//     return await this.authService.jwtLogin(data);
+// Minjung's Code End
   }
 }
