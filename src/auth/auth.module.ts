@@ -1,21 +1,52 @@
-import { forwardRef, Module } from '@nestjs/common';
+//src/auth/auth.module.ts
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt/jwt.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { UsersModule } from 'src/users/users.module';
+import { JwtStrategy } from './jwt.strategy';
+
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined');
+}
+export const jwtSecret = process.env.JWT_SECRET;
+export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME;
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt', session: false }),
-    //strategy 에 대한 기본적인 설정을 할 수 있음.
+    PrismaModule,
+    PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1y' },
+      secret: jwtSecret,
+      signOptions: { expiresIn: jwtExpirationTime }, // e.g. 30s, 7d, 24h
     }),
-    forwardRef(() => UsersModule), //user모듈에 export된거들어감
+    UsersModule,
   ],
+  controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
-})
+
+// Minjung's code start
+// import { forwardRef, Module } from '@nestjs/common';
+// import { AuthService } from './auth.service';
+// import { UsersModule } from '../users/users.module';
+// import { JwtModule } from '@nestjs/jwt';
+// import { PassportModule } from '@nestjs/passport';
+// import { JwtStrategy } from './jwt/jwt.strategy';
+
+// @Module({
+//   imports: [
+//     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+//     //strategy 에 대한 기본적인 설정을 할 수 있음.
+//     JwtModule.register({
+//       secret: process.env.JWT_SECRET,
+//       signOptions: { expiresIn: '1y' },
+//     }),
+//     forwardRef(() => UsersModule), //user모듈에 export된거들어감
+//   ],
+//   providers: [AuthService, JwtStrategy],
+//   exports: [AuthService],
+// Minjung's code end
+  
 export class AuthModule {}
