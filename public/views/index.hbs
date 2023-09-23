@@ -57,6 +57,7 @@
 </div>
 
   </body>
+  
    <script>
   document.addEventListener("DOMContentLoaded", function() {
     // 로컬 스토리지에서 토큰 가져오기
@@ -96,45 +97,45 @@
 
 
   // 컬럼 버튼을 눌렀을 때의 이벤트
-document.getElementById('showColumns').addEventListener('click', function() {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) {
-    alert("로그인이 필요합니다.");
-    return;
-  }
-
-  // API 호출
-  fetch('/columns', {
-    headers: {
-        "Authorization": `Bearer ${accessToken}`
+  document.getElementById('showColumns').addEventListener('click', function() {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("로그인이 필요합니다.");
+      return;
     }
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.message) {
-      alert(data.message);  // 에러 메시지가 있다면 출력
-    } else {
-      // 테이블에 컬럼 데이터 삽입
-      const columnsBody = document.getElementById('columnsBody');
-      columnsBody.innerHTML = ''; // 기존 데이터 삭제
-      data.forEach(column => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${column.columnId}</td>
-          <td>${column.name}</td>
-          <td>${column.order}</td>
-          <!-- 추가적으로 필요한 필드 -->
-        `;
-        columnsBody.appendChild(row);
-      });
 
-      // 테이블 보이기
-      document.getElementById('columnsTable').style.display = 'block';
-    }
-  })
-  .catch(error => {
-    console.error("컬럼 정보를 가져오는데 실패했습니다.", error);
-    alert("컬럼 정보를 가져오는데 실패했습니다.");  // 이 부분도 추가할 수 있습니다.
+    // API 호출
+    fetch('/columns', {
+      headers: {
+          "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        alert(data.message);  // 에러 메시지가 있다면 출력
+      } else {
+        // 테이블에 컬럼 데이터 삽입
+        const columnsBody = document.getElementById('columnsBody');
+        columnsBody.innerHTML = ''; // 기존 데이터 삭제
+        data.forEach(column => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${column.columnId}</td>
+            <td>${column.name}</td>
+            <td>${column.order}</td>
+            <!-- 추가적으로 필요한 필드 -->
+          `;
+          columnsBody.appendChild(row);
+        });
+
+        // 테이블 보이기
+        document.getElementById('columnsTable').style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error("컬럼 정보를 가져오는데 실패했습니다.", error);
+      alert("컬럼 정보를 가져오는데 실패했습니다.");  // 이 부분도 추가할 수 있습니다.
   });
 });
 </script>
