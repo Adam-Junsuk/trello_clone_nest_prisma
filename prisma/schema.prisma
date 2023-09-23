@@ -3,7 +3,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,18 +10,23 @@ generator client {
 // 사용자 관리
 model Users {
   userId       Int      @id @default(autoincrement())
-  username String
+  username String?
   password String
   email    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
   signupVerifyToken String? @unique
   
   Boards   Boards[]
+  Columns  Columns[]
   Cards    Cards[]
   Comments Comments[]
   BoardsUsers BoardUsers[]
+  ColumnsUsers ColumnUsers[]
   CardUsers   CardUsers[]
   @@map("Users")
 }
+
 
 // 보드 관리
 model Boards {
@@ -30,21 +34,25 @@ model Boards {
   name        String
   backgroundColor String
   description String?
- CreatorId Int 
+  CreatorId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
 
- Creator    Users  @relation(fields: [CreatorId], references: [userId])
+  Creator    Users  @relation(fields: [CreatorId], references: [userId])
   Columns Columns[]
- BoardUsers BoardUsers[]
+  BoardUsers BoardUsers[]
   @@map("Boards")
 }
 
 // 보드와 사용자의 다대다 관계
 model BoardUsers {
   BoardId Int
- UserId  Int
+  UserId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   
   Board   Boards @relation(fields: [BoardId], references: [boardId])
- User    Users  @relation(fields: [UserId], references: [userId])
+  User    Users  @relation(fields: [UserId], references: [userId])
 
   @@id([BoardId, UserId])
   @@map("BoardUsers")
@@ -56,11 +64,29 @@ model Columns {
   name    String
   order   Int
   BoardId Int
+  CreatorId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
 
 
   Board   Boards  @relation(fields: [BoardId], references: [boardId])
+  Creator    Users?  @relation(fields: [CreatorId], references: [userId])
   Cards   Cards[]
-   @@map("Columns")
+  ColumnUsers ColumnUsers[]
+  @@map("Columns")
+}
+
+model ColumnUsers {
+  ColumnId Int
+  UserId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  Column   Columns @relation(fields: [ColumnId], references: [columnId])
+  User   Users @relation(fields: [UserId], references: [userId])
+
+  @@id([ColumnId, UserId])
+  @@map("ColumnUsers")
 }
 
 // 카드 관리
@@ -71,13 +97,14 @@ model Cards {
   color       String?
   order       Int
   ColumnId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   dueDate     DateTime? 
   Column      Columns   @relation(fields: [ColumnId], references: [columnId])
   
- Users       Users[]
+  Users       Users[]
   Comments    Comments[]
-
- CardUsers   CardUsers[]
+  CardUsers   CardUsers[]
   @@map("Cards")
 }
 
@@ -85,23 +112,26 @@ model Cards {
 model CardUsers {
   CardId Int
   UserId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   
   Card   Cards @relation(fields: [CardId], references: [cardId])
   User   Users @relation(fields: [UserId], references: [userId])
 
   @@id([CardId, UserId])
-   @@map("CardUsers")
+  @@map("CardUsers")
 }
 
 // 댓글 관리
 model Comments {
   commentId      Int    @id @default(autoincrement())
   content String
- userId  Int
-  cardId  Int
+    UserId  Int
+  CardId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-
- User    Users   @relation(fields: [userId], references: [userId])
-  Card    Cards   @relation(fields: [cardId], references: [cardId])
-   @@map("Comments")
+  User    Users   @relation(fields: [UserId], references: [userId])
+  Card    Cards   @relation(fields: [CardId], references: [cardId])
+  @@map("Comments")
 }
