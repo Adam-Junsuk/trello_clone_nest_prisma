@@ -26,6 +26,8 @@ export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME;
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
+})
 
 // Minjung's code start
 // import { forwardRef, Module } from '@nestjs/common';

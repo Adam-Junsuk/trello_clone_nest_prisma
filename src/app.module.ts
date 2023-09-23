@@ -10,14 +10,14 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users-email/users.module';
 import { ColumnsModule } from './columns/columns.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth-basic/auth.module';
 import { AppService } from './app.service';
 import { EmailModule } from './email/email.module';
 import { AuthModule as Emodule } from './auth-email/auth.module';
 import { LoggingModule } from './logging/logging.module';
 import emailConfig from './config/emailConfig';
 import { PrismaService } from './prisma/prisma.service';
-import { GoogleStrategy } from './users/auth/google-auth.strategy';
+import { GoogleStrategy } from './auth-google/google-auth.strategy';
 
 @Module({
   imports: [
@@ -28,14 +28,13 @@ import { GoogleStrategy } from './users/auth/google-auth.strategy';
     }),
     PrismaModule,
     AuthModule,
-    Emodule,
     UsersModule,
-    PrismaModule, // 추가
+    Emodule,
+    PrismaModule,
     BoardsModule,
     ColumnsModule,
     CardsModule,
     CommentsModule,
-    UsersModule,
     EmailModule,
     LoggingModule,
   ],

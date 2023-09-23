@@ -35,7 +35,7 @@ export class CommentsService {
             cardId,
           },
         },
-        Users: {
+        User: {
           connect: {
             userId,
           },

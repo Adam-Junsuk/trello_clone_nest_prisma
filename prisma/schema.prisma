@@ -34,7 +34,6 @@ model Boards {
   name            String
   backgroundColor String
   description     String?
-  CreatorId       Int
   createdAt       DateTime  @default(now())
   updatedAt       DateTime? @updatedAt
 
@@ -57,10 +56,6 @@ model BoardUsers {
 
   @@id([BoardId, UserId])
   @@map("BoardUsers")
-}
-
-@@id([BoardId, UserId])
-@@map("BoardUsers")
 }
 
 model Columns {

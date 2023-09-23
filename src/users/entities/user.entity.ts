@@ -24,4 +24,7 @@ export class UserEntity implements Users {
 
   @Exclude()
   password: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  signupVerifyToken: string;
 }

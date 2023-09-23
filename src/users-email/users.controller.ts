@@ -31,18 +31,18 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
-    try {
-      const { username, email, password } = createUserDto;
-      await this.usersService.createUser(username, email, password);
-    } catch (error) {
-      if (error instanceof UnprocessableEntityException) {
-        throw new UnprocessableEntityException(error.message);
-      }
-      throw new InternalServerErrorException();
-    }
-  }
+  // @Post()
+  // async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
+  //   try {
+  //     const { username, email, password } = createUserDto;
+  //     await this.usersService.createUser(username, email, password);
+  //   } catch (error) {
+  //     if (error instanceof UnprocessableEntityException) {
+  //       throw new UnprocessableEntityException(error.message);
+  //     }
+  //     throw new InternalServerErrorException();
+  //   }
+  // }
 
   @Post('/email-verify')
   async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto): Promise<string> {
