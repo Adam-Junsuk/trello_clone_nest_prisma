@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { EmailService } from 'src/email/email.service';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import * as uuid from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth-email/auth.service';

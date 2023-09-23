@@ -1,7 +1,7 @@
 // cards.service.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { CardsService } from './cards.service';
-import { PrismaService } from '../prisma.service'; // PrismaService를 import
+import { PrismaService } from '../../prisma/prisma.service'; // PrismaService를 import
 import { CardsController } from './cards.controller';
 
 describe('CardsController', () => {
