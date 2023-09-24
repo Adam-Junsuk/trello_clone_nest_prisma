@@ -14,7 +14,7 @@ model Users {
   password          String
   email             String    @unique
   createdAt         DateTime  @default(now())
-  updatedAt         DateTime? @updatedAt
+  updatedAt         DateTime @updatedAt
   signupVerifyToken String?   @unique
 
   Boards       Boards[]
@@ -35,7 +35,7 @@ model Boards {
   backgroundColor String
   description     String?
   createdAt       DateTime  @default(now())
-  updatedAt       DateTime? @updatedAt
+  updatedAt       DateTime @updatedAt
 
   Creator    Users        @relation(fields: [CreatorId], references: [userId])
   Columns    Columns[]
@@ -65,7 +65,7 @@ model Columns {
   BoardId   Int
   CreatorId Int?
   createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  updatedAt DateTime @updatedAt
 
   Board       Boards        @relation(fields: [BoardId], references: [boardId])
   Creator     Users?        @relation(fields: [CreatorId], references: [userId])
@@ -94,7 +94,6 @@ model Cards {
   name        String
   description String?
   color       String?
-  order       Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   dueDate     DateTime?

@@ -7,12 +7,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './jwt.strategy';
+import * as dotenv from 'dotenv';
+dotenv.config();
+export const jwtSecret = process.env.JWT_SECRET;
+export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME;
 
+console.log(process.env.JWT_SECRET);
 if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is not defined');
 }
-export const jwtSecret = process.env.JWT_SECRET;
-export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME;
 
 @Module({
   imports: [
@@ -50,5 +53,4 @@ export const jwtExpirationTime = process.env.JWT_EXPIRATION_TIME;
 //   providers: [AuthService, JwtStrategy],
 //   exports: [AuthService],
 // Minjung's code end
-  
 export class AuthModule {}
