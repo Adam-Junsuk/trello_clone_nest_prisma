@@ -4,15 +4,26 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CardDto } from './dto/cards.dto';
 
 @Injectable()
 export class CardsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createCard(data) {
+  async createCard(columnId: number, data: CardDto) {
     try {
-      return await this.prisma.cards.create({ data });
+      console.log(data.description);
+      return await this.prisma.cards.create({
+        data: {
+          ColumnId: columnId,
+          name: data.name || 'Unnamed Card', // Default name if not provided
+          description: data.description,
+          color: data.color || null,
+          order: data.order || 0,
+        },
+      });
     } catch (error) {
+      console.log(error.stack);
       if (error.code === 'P2025') {
         throw new NotFoundException('존재하지 않는 컬럼입니다.');
       }
@@ -34,7 +45,18 @@ export class CardsService {
     try {
       const card = await this.prisma.cards.findUnique({
         where: { cardId },
-        include: { Users: true },
+        include: {
+          Comments: {
+            include: {
+              User: {
+                select: {
+                  userId: true,
+                },
+              },
+            },
+          },
+          Column: true,
+        },
       });
       if (!card) {
         throw new NotFoundException('존재하지 않는 Card입니다.');
