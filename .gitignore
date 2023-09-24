@@ -3,7 +3,7 @@ frontend/node_modules/
 .env
 .node_modules
 docker-compose.yml
-/frontend
+
 # compiled output
 /dist
 /node_modules
