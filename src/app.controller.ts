@@ -4,6 +4,9 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('')
 export class AppController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly appService: AppService) {}
 
   @Get('google')
@@ -12,8 +15,8 @@ export class AppController {
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req){
-    return this.appService.googleLogin(req)
+  googleAuthRedirect(@Req() req) {
+    return this.appService.googleLogin(req);
   }
 
   @Get('index')
