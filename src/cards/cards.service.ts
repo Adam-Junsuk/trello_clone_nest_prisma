@@ -51,11 +51,24 @@ export class CardsService {
               User: {
                 select: {
                   userId: true,
+                  username: true,
                 },
               },
             },
           },
           Column: true,
+          CardUsers: {
+            // Include CardUsers to get the relation between Cards and Users
+            include: {
+              User: {
+                // Include Users related to this card
+                select: {
+                  userId: true,
+                  username: true, // Include username or any other fields you need
+                },
+              },
+            },
+          },
         },
       });
       if (!card) {

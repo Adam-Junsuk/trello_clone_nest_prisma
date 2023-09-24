@@ -8,19 +8,26 @@ import {
   Get,
   Patch,
   ParseIntPipe,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { UpdateCommentDto } from './dtos/update-comment.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CommentEntity } from './entities/comment.entity';
-
-@Controller('comments')
+import { Users } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+interface RequestWithUser extends Request {
+  user: Users;
+}
+@Controller('cards/:cardId/comments')
 @ApiTags('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
@@ -33,12 +40,23 @@ export class CommentsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'The record has been successfully created',
   })
   @ApiForbiddenResponse({ description: 'ERROR OCCURED!!' })
-  async createComment(@Body() createCommentDto: CreateCommentDto) {
-    const comment = await this.commentsService.createComment(createCommentDto);
+  async createComment(
+    @Req() req: RequestWithUser,
+    @Param('cardId') cardId: number,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
+    const { userId } = req.user;
+    const comment = await this.commentsService.createComment(
+      cardId,
+      userId,
+      createCommentDto,
+    );
 
     if (!comment) {
       throw new NotFoundException('Comment not created');
@@ -49,7 +67,7 @@ export class CommentsController {
 
   @Get(':id')
   @ApiResponse({ type: CommentEntity })
-  async findOne(@Param('id', ParseIntPipe) id : number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const comment = await this.commentsService.findOne(+id);
 
     if (!comment) {

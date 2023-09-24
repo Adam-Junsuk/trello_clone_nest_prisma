@@ -1,6 +1,7 @@
 // trello_clone_nest_prisma/src/columns/columns.controller.ts
 
 import {
+  Req,
   Controller,
   Get,
   Post,
@@ -23,6 +24,11 @@ import {
 } from '@nestjs/swagger';
 import { ColumnEntity } from './entities/column.entity';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+import { Users } from '@prisma/client';
+
+interface RequestWithUser extends Request {
+  user: Users;
+}
 
 @Controller('columns')
 @ApiTags('columns')
@@ -33,9 +39,13 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity })
-  async create(@Body() createColumnDto: CreateColumnDto) {
+  async create(
+    @Req() req: RequestWithUser,
+    @Body() createColumnDto: CreateColumnDto,
+  ) {
+    const { userId } = req.user;
     const columnEntity = new ColumnEntity(
-      await this.columnsService.create(createColumnDto),
+      await this.columnsService.create(userId, createColumnDto),
     );
     console.log('columns.controller columnEntity:', columnEntity);
     if (!columnEntity) {
