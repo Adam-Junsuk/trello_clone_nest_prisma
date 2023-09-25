@@ -22,27 +22,16 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth-email/auth.guard';
 import { AuthService } from '../auth-email/auth.service';
 import { Response } from 'express';
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 @Controller('users')
 @ApiTags('users')
+@UseGuards(GoogleOauthGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private authService: AuthService,
   ) {}
-
-  // @Post()
-  // async createUser(@Body() createUserDto: CreateUserDto): Promise<void> {
-  //   try {
-  //     const { username, email, password } = createUserDto;
-  //     await this.usersService.createUser(username, email, password);
-  //   } catch (error) {
-  //     if (error instanceof UnprocessableEntityException) {
-  //       throw new UnprocessableEntityException(error.message);
-  //     }
-  //     throw new InternalServerErrorException();
-  //   }
-  // }
 
   @Post('/email-verify')
   async verifyEmail(@Query() verifyEmailDto: VerifyEmailDto): Promise<string> {
@@ -58,7 +47,7 @@ export class UsersController {
     }
   }
 
-  @Post('/login')
+  @Post('/logine')
   async login(
     @Res() res: Response,
     @Body() loginDto: UserLoginDto,

@@ -12,6 +12,15 @@ export class AppService {
       user: req.user,
     };
   }
-  // getHello(): string {
-  //   return 'Hello World!';
+
+  facebookLogin(req) {
+    if (!req.user) {
+      return 'No user from facebook';
+    }
+
+    return {
+      message: 'User information from facebook',
+      user: req.user,
+    };
+  }
 }

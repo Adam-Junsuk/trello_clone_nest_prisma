@@ -1,3 +1,4 @@
+//adam/trello_clone_nest_prisma/src/boards/boards.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBoardDto } from './dto/create-board.dto';

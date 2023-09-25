@@ -1,4 +1,3 @@
-// trello_clone_nest_prisma/src/users/users.controller.ts
 import {
   Controller,
   Get,
@@ -11,7 +10,6 @@ import {
   ParseIntPipe,
   UseGuards,
   Render,
-  // UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,15 +24,16 @@ import {
 import { UserEntity } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 import { HttpExceptionFilter } from 'src/http-exception.filter'; // minjung's
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
+@UseGuards(GoogleOauthGuard)
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  // @Render('user-create')
   @ApiCreatedResponse({
     type: UserEntity,
     description: 'The user has been successfully created.',

@@ -1,0 +1,152 @@
+/* /Users/adam/trello_clone_nest_prisma/frontend/src/styles/Board.css */
+
+#board {
+  bottom: 0;
+  left: 0;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 8px;
+  position: absolute;
+  right: 0;
+  scrollbar-color: #fff6 #00000026;
+  scrollbar-width: auto;
+  top: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.list-wrapper {
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100%;
+  margin: 0 4px;
+  scroll-margin: 8px;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 272px;
+}
+
+.add-column-wrapper {
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100%;
+  margin: 0 4px;
+  scroll-margin: 8px;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 272px;
+}
+
+.add-column-wrapper input {
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.add-column-wrapper button {
+  padding: 10px 20px;
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.list {
+  background-color: var(--list-background, #ebecf0);
+  border-radius: 12px;
+  box-shadow:
+    0 1px 1px #091e4240,
+    0 0 1px #091e424f;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  position: relative;
+  white-space: normal;
+  width: 100%;
+}
+
+.list-card {
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow:
+    0 1px 1px #091e4240,
+    0 0 1px #091e424f;
+  color: #172b4d;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 8px;
+  max-width: 300px;
+  min-height: 20px;
+  position: relative;
+  scroll-margin: 8px;
+  z-index: 0;
+  text-decoration: none;
+}
+
+.list-card-details {
+  overflow: hidden;
+  padding: 8px 8px 4px 12px;
+  position: relative;
+  z-index: 10;
+}
+/* 수정된 .add-column-wrapper 스타일 */
+.add-column-wrapper {
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100%;
+  margin: 0 4px;
+  scroll-margin: 8px;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 272px;
+}
+
+.add-column-wrapper input {
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.add-column-wrapper button {
+  padding: 10px 20px;
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* 새로 추가되는 .open-card-composer 스타일 */
+.open-card-composer {
+  border-radius: 3px;
+  box-shadow:
+    0 1px 1px #091e4240,
+    0 0 1px #091e424f;
+  color: var(--list-text-subtle);
+  display: flex; /* flex로 변경 */
+  align-items: center; /* 내부 아이템을 중앙에 정렬 */
+  justify-content: space-between; /* 내부 아이템을 양 끝으로 정렬 */
+  flex: 1 0 auto;
+  margin: 8px 8px 8px 8px; /* 마진을 동일하게 설정 */
+  padding: 8px 12px 8px 12px; /* 패딩을 동일하게 설정 */
+  position: relative;
+  text-decoration: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: var(--list-background, #ebecf0);
+  cursor: pointer;
+}
+
+.close-card-composer {
+  position: absolute; /* 절대 위치 지정 */
+  top: 0; /* 상단에 위치 */
+  right: 0; /* 우측에 위치 */
+  background-color: red; /* 배경색을 빨간색으로 (확인용) */
+  color: white; /* 글자색을 흰색으로 */
+  z-index: 100; /* z-index를 높게 설정 */
+  cursor: pointer; /* 마우스 커서를 포인터로 */
+}
