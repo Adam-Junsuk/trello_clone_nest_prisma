@@ -10,8 +10,9 @@ import {
   Post,
   Put,
   UseFilters,
-  HttpException,
   UseGuards,
+  InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -21,66 +22,78 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
-import { AuthService } from 'src/auth-basic/auth.service';
 import { Users } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+import {
+  BoardListExample,
+  BoardDetailedExample,
+} from './boards.response.examples';
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 interface RequestWithUser extends Request {
   user: Users;
 }
 
+@ApiTags('boards')
 @Controller('boards')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer Token for authentication',
+})
+@ApiBearerAuth()
+@ApiResponse({ status: 500, description: '서버 에러' })
+@UseGuards(JwtAuthGuard)
 @UseFilters(HttpExceptionFilter)
+@UseGuards(GoogleOauthGuard)
 export class BoardsController {
-  constructor(
-    private readonly boardsService: BoardsService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly boardsService: BoardsService) {}
 
-  @ApiTags('보드 전체조회')
-  @ApiOperation({ summary: '해당 유저가 가지고 있는 전체 보드를 조회' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiOperation({ summary: '해당 유저가 가지고 있는 보드 목록을 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '보드 목록 조회',
+    content: {
+      examples: BoardListExample,
+    },
+  })
   @Get()
-  async getArticles(@Req() req: RequestWithUser) {
-    req.user;
+  async getBoards() {
     return this.boardsService.boards();
   }
 
-  @ApiTags('보드 상세조회')
   @ApiOperation({ summary: '보드의 내용을 상세조회' })
+  @ApiResponse({
+    status: 200,
+    description: '보드 상세 조회',
+    content: {
+      examples: BoardDetailedExample,
+    },
+  })
   @ApiResponse({ status: 404, description: '존재하지 않는 Board입니다.' })
-  @ApiResponse({ status: 500, description: '서버에러' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @Get('/:boardId')
   async getBoardById(@Param('boardId') boardId: string) {
     const board = await this.boardsService.board(boardId);
-    if (!board) throw new HttpException('존재하지 않는 board입니다.', 404);
+    if (!board) throw new NotFoundException('존재하지 않는 Board입니다.');
     return board;
   }
 
-  @ApiTags('보드 생성')
   @ApiOperation({ summary: '새로운 보드를 생성' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiResponse({ status: 201, description: '보드가 생성되었습니다.' })
   @Post()
   async createBoard(@Req() req: RequestWithUser, @Body() data: CreateBoardDto) {
     const { userId } = req.user;
-    await this.boardsService.createBoard(userId, data);
+    const createdBoard = await this.boardsService.createBoard(userId, data);
+    if (!createdBoard)
+      throw new InternalServerErrorException('보드 생성에 실패하였습니다.');
     return { message: '보드가 생성되었습니다.' };
   }
 
-  @ApiTags('보드 수정')
   @ApiOperation({ summary: '보드의 내용을 수정' })
   @ApiResponse({ status: 200, description: '보드가 수정되었습니다.' })
   @ApiResponse({ status: 404, description: '존재하지 않는 Board입니다.' })
-  @ApiResponse({ status: 400, description: '잘못된 데이터 입니다.' })
-  @ApiResponse({ status: 500, description: '서버에러.' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @Put('/:boardId')
   async updateBoard(
     @Param('boardId') boardId: string,
@@ -88,22 +101,18 @@ export class BoardsController {
   ) {
     //const { name, backgroundColor, description } = data;
     const board = await this.boardsService.board(boardId);
-    if (!board) throw new HttpException('존재하지 않는 board입니다.', 404);
+    if (!board) throw new NotFoundException('존재하지 않는 Board입니다.');
     await this.boardsService.updateBoard(boardId, data);
     return { message: '보드가 수정되었습니다.' };
   }
 
-  @ApiTags('보드삭제')
   @ApiOperation({ summary: '보드를 삭제' })
   @ApiResponse({ status: 200, description: '보드가 삭제되었습니다.' })
-  @ApiResponse({ status: 404, description: '존재하지 않는 Board입니다.' })
-  @ApiResponse({ status: 500, description: '서버에러.' })
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
+  @ApiResponse({ status: 400, description: '존재하지 않는 Board입니다.' })
   @Delete('/:boardId')
   async deleteBoard(@Param('boardId') boardId: string) {
     const board = await this.boardsService.board(boardId);
-    if (!board) throw new HttpException('존재하지 않는 board입니다.', 404);
+    if (!board) throw new NotFoundException('존재하지 않는 Board입니다.');
     await this.boardsService.deleteBoard(boardId);
     return { message: '보드가 삭제되었습니다.' };
   }

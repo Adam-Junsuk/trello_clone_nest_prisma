@@ -1,6 +1,8 @@
-//src/auth/auth.service.ts
-
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AuthEntity } from './entity/auth.entity';
@@ -8,9 +10,12 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+  validateOAuthLogin(profile: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService, // private redisService: RedisService,
+    private jwtService: JwtService,
   ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
@@ -31,7 +36,7 @@ export class AuthService {
     // step 3: generate a JWT token containing the user id and return it
     const payload = { userId: user.userId };
     const accesstoken = this.jwtService.sign(payload);
-
     return { accessToken: accesstoken };
+
   }
 }

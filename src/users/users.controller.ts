@@ -1,4 +1,3 @@
-// trello_clone_nest_prisma/src/users/users.controller.ts
 import {
   Controller,
   Get,
@@ -11,7 +10,6 @@ import {
   ParseIntPipe,
   UseGuards,
   Render,
-  // UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,15 +25,17 @@ import { UserEntity } from './entities/user.entity';
 // import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 import { JwtAuthGuard } from '../auth-basic/jwt-auth.guard';
 import { HttpExceptionFilter } from '../http-exception.filter'; // minjung's
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
+
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)
+@UseGuards(GoogleOauthGuard)
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  // @Render('user-create')
   @ApiCreatedResponse({
     type: UserEntity,
     description: 'The user has been successfully created.',
@@ -82,29 +82,28 @@ export class UsersController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     return new UserEntity(await this.usersService.remove(id));
 
+    // --Minjung's Code Start
+    // import { LoginRequsetDto } from 'src/auth/dto/login.request.dto';
+    // import { AuthService } from 'src/auth/auth.service';
 
-// --Minjung's Code Start
-// import { LoginRequsetDto } from 'src/auth/dto/login.request.dto';
-// import { AuthService } from 'src/auth/auth.service';
+    // @Controller()
+    // export class UsersController {
+    //   constructor(
+    //     private readonly usersService: UsersService,
+    //     private readonly authService: AuthService,
+    //   ) {}
 
-// @Controller()
-// export class UsersController {
-//   constructor(
-//     private readonly usersService: UsersService,
-//     private readonly authService: AuthService,
-//   ) {}
+    //   @ApiTags('회원 가입')
+    //   @Post('auth/signup')
+    //   async creatUser(@Body() data: CreateUserDto) {
+    //     await this.usersService.createUser(data);
+    //     return { message: '회원가입이 완료되었습니다.' };
+    //   }
 
-//   @ApiTags('회원 가입')
-//   @Post('auth/signup')
-//   async creatUser(@Body() data: CreateUserDto) {
-//     await this.usersService.createUser(data);
-//     return { message: '회원가입이 완료되었습니다.' };
-//   }
-
-//   @ApiTags('로그인')
-//   @Post('auth/login')
-//   async login(@Body() data: LoginRequsetDto) {
-//     return await this.authService.jwtLogin(data);
-// Minjung's Code End
+    //   @ApiTags('로그인')
+    //   @Post('auth/login')
+    //   async login(@Body() data: LoginRequsetDto) {
+    //     return await this.authService.jwtLogin(data);
+    // Minjung's Code End
   }
 }
