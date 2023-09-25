@@ -5,29 +5,29 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join, resolve } from 'path';
+import * as dotenv from 'dotenv';
+import session from 'express-session';
+
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // path problem
-  // app.useStaticAssets(join(__dirname, '..', 'public'));
-  // app.setBaseViewsDir(join(__dirname, '..', 'public', 'views'));
+  app.use(
+    session({
+      secret: 'GOOGLE_SECRET',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
-  // solution1
   app.useStaticAssets(join('..', 'trello_clone_nest_prisma', 'public'));
   app.setBaseViewsDir(
     join('..', 'trello_clone_nest_prisma', 'public', 'views'),
   );
-  // app.setViewEngine('ejs');
   app.setViewEngine('hbs');
-  // solution2
-  // app.useStaticAssets(resolve('..', 'public'));
-  // app.setBaseViewsDir(resolve('public', 'views'));
-  // app.setViewEngine('ejs');
-
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // /*TODO: Error나면 transform:true 부분을 확인/
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  //   app.useGlobalPipes(new ValidationPipe({ transform: true })); // minjung's code
 
   const config = new DocumentBuilder()
     .setTitle('Trello Clone API')

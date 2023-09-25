@@ -18,6 +18,9 @@ import { LoggingModule } from './logging/logging.module';
 import emailConfig from './config/emailConfig';
 import { PrismaService } from './prisma/prisma.service';
 import { GoogleStrategy } from './auth-google/google-auth.strategy';
+import { PassportModule } from '@nestjs/passport';
+// import { FacebookStrategy } from './auth-facebook/facebook.strategy';
+// import { KakaoStrategy } from './auth-kakao/kakao-strategy';
 
 @Module({
   imports: [
@@ -37,9 +40,18 @@ import { GoogleStrategy } from './auth-google/google-auth.strategy';
     CommentsModule,
     EmailModule,
     LoggingModule,
+    PassportModule.register({ defaultStrategy: 'google' }),
   ],
+
   controllers: [AppController],
-  providers: [PrismaService, AppService, CommentsService, GoogleStrategy],
+  providers: [
+    PrismaService,
+    AppService,
+    CommentsService,
+    GoogleStrategy,
+    // FacebookStrategy,
+    // KakaoStrategy,
+  ],
 })
 export class AppModule implements NestModule {
   //로거미들웨어적용

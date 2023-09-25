@@ -1,8 +1,17 @@
-import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Render,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
+import { GoogleOauthGuard } from './auth-google/google-auth.guard';
 
-@Controller('')
+@Controller('auth')
+@UseGuards(GoogleOauthGuard)
 export class AppController {
   getHello(): any {
     throw new Error('Method not implemented.');
@@ -17,6 +26,16 @@ export class AppController {
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(@Req() req) {
     return this.appService.googleLogin(req);
+  }
+
+  @Get('/facebook')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLogin(@Req() req) {}
+
+  @Get('/facebook/redirect')
+  @UseGuards(AuthGuard('facebook'))
+  facebookLoginRedirect(@Req() req) {
+    return this.appService.facebookLogin(req);
   }
 
   @Get('index')

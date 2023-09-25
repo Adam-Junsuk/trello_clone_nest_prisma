@@ -7,12 +7,15 @@ import {
   Param,
   Body,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CardDto } from './dto/cards.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 @ApiTags('Cards')
+@UseGuards(GoogleOauthGuard)
 @Controller('columns/:columnId/cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}

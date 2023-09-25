@@ -8,6 +8,7 @@ import {
   Get,
   Patch,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
@@ -19,9 +20,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CommentEntity } from './entities/comment.entity';
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 @Controller('comments')
 @ApiTags('comments')
+@UseGuards(GoogleOauthGuard)
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
@@ -49,7 +52,7 @@ export class CommentsController {
 
   @Get(':id')
   @ApiResponse({ type: CommentEntity })
-  async findOne(@Param('id', ParseIntPipe) id : number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const comment = await this.commentsService.findOne(+id);
 
     if (!comment) {
