@@ -1,5 +1,7 @@
-import { Transform } from 'class-transformer';
+// trello_clone_nest_prisma/src/columns/dto/create-column.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+
 import {
   IsString,
   MaxLength,
@@ -23,9 +25,6 @@ export class CreateColumnDto {
   @IsNumber()
   readonly order: number;
 
-  @ApiProperty({
-    example: 1,
-  })
   @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @IsNotEmpty()
@@ -41,7 +40,4 @@ export class CreateColumnDto {
 
   @ApiProperty()
   updatedAt: Date;
-
-  @ApiProperty({ required: false })
-  deletedAt: Date;
 }

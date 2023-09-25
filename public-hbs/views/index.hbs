@@ -29,17 +29,35 @@
 
           </div>
           <div class='col-auto'>
-            <a href='/boards' class='btn btn-link text-light me-2'>보드</a>
+            {{!-- <a href='/boards' class='btn btn-link text-light me-2'>보드</a> --}}
+            <a href='/boards' id='showBoards' class='btn btn-link text-light me-2'>보드</a>
             {{!-- <a href='/columns' class='btn btn-link text-light me-2'>컬럼</a> --}}
-            <a href='#' id='showColumns' class='btn btn-link text-light me-2'>컬럼</a>
+            <a id='showColumns' class='btn btn-link text-light me-2'>컬럼</a>
             <a href='/users' class='btn btn-link text-light me-2'>사용자 목록</a>
           </div>
         </div>
       </div>
     </header>
     <!-- 나머지 부분은 동일하게 유지 -->
-<a href='#' id='showColumns' class='btn btn-link text-light me-2'>컬럼</a>
 
+<div id='boardsTable' style='display:none;'>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>보드 ID</th>
+        <th>이름</th>
+        <!-- 추가적으로 필요한 필드 -->
+      </tr>
+    </thead>
+    <tbody id='boardsBody'>
+      <!-- 여기에 보드 데이터가 들어갈 것입니다. -->
+    </tbody>
+  </table>
+</div>
+{{!-- <div class='container mt-5' id='boardsContainer'>
+  <!-- 여기에 보드 카드가 들어갈 것입니다. -->
+</div> --}}
+{{!-- <a href='#' id='showColumns' class='btn btn-link text-light me-2'>컬럼</a> --}}
 <div id='columnsTable' style='display:none;'>
   <table class='table'>
     <thead>
@@ -95,6 +113,51 @@
     }
   });
 
+  // 보드 버튼을 눌렀을 때의 이벤트
+  console.log(document.getElementById('showBoards'));  // null이 아니어야 함
+
+  document.getElementById('showBoards').addEventListener('click', function() {
+  console.log('showBoards 버튼을 눌렀습니다.');
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+
+  console.log("보드 정보를 가져옵니다.", accessToken);
+  // API 호출
+  fetch('/boards', {
+    headers: {
+        "Authorization": `Bearer ${accessToken}`
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.message) {
+      alert(data.message);  // 에러 메시지가 있다면 출력
+    } else {
+      // 테이블에 보드 데이터 삽입
+      const boardsBody = document.getElementById('boardsBody');
+      boardsBody.innerHTML = ''; // 기존 데이터 삭제
+      data.forEach(board => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${board.boardId}</td>
+          <td>${board.name}</td>
+          <!-- 추가적으로 필요한 필드 -->
+        `;
+        boardsBody.appendChild(row);
+      });
+
+      // 테이블 보이기
+      document.getElementById('boardsTable').style.display = 'block';
+    }
+    })
+    .catch(error => {
+    console.error("보드 정보를 가져오는데 실패했습니다.", error);
+    alert("보드 정보를 가져오는데 실패했습니다.");
+    });
+  });
 
   // 컬럼 버튼을 눌렀을 때의 이벤트
   document.getElementById('showColumns').addEventListener('click', function() {
@@ -137,6 +200,9 @@
       console.error("컬럼 정보를 가져오는데 실패했습니다.", error);
       alert("컬럼 정보를 가져오는데 실패했습니다.");  // 이 부분도 추가할 수 있습니다.
   });
-});
+
+    // URL 변경
+  window.history.pushState({}, '', '/index/columns');
+  });
 </script>
 </html>

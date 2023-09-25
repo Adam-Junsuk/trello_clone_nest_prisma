@@ -8,6 +8,12 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
+  constructor() {
+    super({
+      log: ['query', 'info', 'warn'], // 디버깅을 위한 로그 설정
+    });
+  }
+
   async onModuleInit() {
     await this.$connect();
   }
