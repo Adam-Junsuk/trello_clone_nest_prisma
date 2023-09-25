@@ -13,13 +13,10 @@ import { CardsService } from './cards.service';
 import { CardDto } from './dto/cards.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@ApiTags('Cards')
-@ApiResponse({ status: 500, description: '서버에러' })
-import { ApiTags } from '@nestjs/swagger';
-import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 @ApiTags('Cards')
-@UseGuards(GoogleOauthGuard)
+@ApiResponse({ status: 500, description: '서버에러' })
+
 @Controller('columns/:columnId/cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}

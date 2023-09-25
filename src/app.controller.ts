@@ -18,35 +18,35 @@ export class AppController {
   }
   constructor(private readonly appService: AppService) {}
 
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {}
+  // @Get('google')
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuth(@Req() req) {}
 
-  @Get('google/redirect')
-  @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req) {
-    return this.appService.googleLogin(req);
-  }
+  // @Get('google/redirect')
+  // @UseGuards(AuthGuard('google'))
+  // googleAuthRedirect(@Req() req) {
+  //   return this.appService.googleLogin(req);
+  // }
 
-  @Get('/facebook')
-  @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(@Req() req) {}
+  // @Get('/facebook')
+  // @UseGuards(AuthGuard('facebook'))
+  // async facebookLogin(@Req() req) {}
 
-  @Get('/facebook/redirect')
-  @UseGuards(AuthGuard('facebook'))
-  facebookLoginRedirect(@Req() req) {
-    return this.appService.facebookLogin(req);
-  }
+  // @Get('/facebook/redirect')
+  // @UseGuards(AuthGuard('facebook'))
+  // facebookLoginRedirect(@Req() req) {
+  //   return this.appService.facebookLogin(req);
+  // }
 
-  @Get('index')
-  @Render('index')
-  root() {
-    return { message: 'Hello SeongMin' };
-  }
+  // @Get('index')
+  // @Render('index')
+  // root() {
+  //   return { message: 'Hello SeongMin' };
+  // }
 
-  @Get('login')
-  @Render('login')
-  login() {
-    return;
-  }
+  // @Get('login')
+  // @Render('login')
+  // login() {
+  //   return;
+  // }
 }

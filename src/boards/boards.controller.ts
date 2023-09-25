@@ -31,7 +31,6 @@ import {
   BoardListExample,
   BoardDetailedExample,
 } from './boards.response.examples';
-import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 interface RequestWithUser extends Request {
   user: Users;
@@ -47,7 +46,6 @@ interface RequestWithUser extends Request {
 @ApiResponse({ status: 500, description: '서버 에러' })
 @UseGuards(JwtAuthGuard)
 @UseFilters(HttpExceptionFilter)
-@UseGuards(GoogleOauthGuard)
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
