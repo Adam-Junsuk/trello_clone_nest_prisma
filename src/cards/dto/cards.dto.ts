@@ -1,8 +1,18 @@
+import { IsString, IsOptional } from 'class-validator';
+
 export class CardDto {
+  @IsOptional()
   name?: string;
-  description?: string;
+
+  @IsString()
+  description: string;
+
+  @IsOptional()
   color?: string;
+
+  @IsOptional()
   order?: number;
-  ColumnId?: number;
+
+  @IsOptional()
   dueDate?: Date;
 }

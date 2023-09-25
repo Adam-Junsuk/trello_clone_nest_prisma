@@ -8,12 +8,15 @@ import {
   Get,
   Patch,
   ParseIntPipe,
+  Req,
+
   UseGuards,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment.dto';
 import { UpdateCommentDto } from './dtos/update-comment.dto';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiResponse,
@@ -22,7 +25,13 @@ import {
 import { CommentEntity } from './entities/comment.entity';
 import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
-@Controller('comments')
+
+import { Users } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+interface RequestWithUser extends Request {
+  user: Users;
+}
+@Controller('cards/:cardId/comments')
 @ApiTags('comments')
 @UseGuards(GoogleOauthGuard)
 export class CommentsController {
@@ -36,12 +45,23 @@ export class CommentsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({
     description: 'The record has been successfully created',
   })
   @ApiForbiddenResponse({ description: 'ERROR OCCURED!!' })
-  async createComment(@Body() createCommentDto: CreateCommentDto) {
-    const comment = await this.commentsService.createComment(createCommentDto);
+  async createComment(
+    @Req() req: RequestWithUser,
+    @Param('cardId') cardId: number,
+    @Body() createCommentDto: CreateCommentDto,
+  ) {
+    const { userId } = req.user;
+    const comment = await this.commentsService.createComment(
+      cardId,
+      userId,
+      createCommentDto,
+    );
 
     if (!comment) {
       throw new NotFoundException('Comment not created');

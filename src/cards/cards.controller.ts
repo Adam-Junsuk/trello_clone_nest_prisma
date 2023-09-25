@@ -21,9 +21,11 @@ export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
   @Post()
-  async create(@Body() createCardDto: CardDto) {
+  async create(@Param('columnId') columnId: number, @Body() data: CardDto) {
+    console.log(data);
     try {
-      await this.cardsService.createCard(createCardDto);
+      // columnId를 사용하여 로직을 수행할 수 있습니다.
+      await this.cardsService.createCard(columnId, data);
       return { message: '카드가 생성되었습니다.' };
     } catch (error) {
       if (error instanceof NotFoundException) {

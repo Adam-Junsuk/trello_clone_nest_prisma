@@ -36,7 +36,7 @@ export class AuthService {
     // step 3: generate a JWT token containing the user id and return it
     const payload = { userId: user.userId };
     const accesstoken = this.jwtService.sign(payload);
-
     return { accessToken: accesstoken };
+
   }
 }

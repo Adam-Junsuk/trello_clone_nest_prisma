@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
@@ -25,6 +26,7 @@ export class CreateColumnDto {
   @ApiProperty({
     example: 1,
   })
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @IsNotEmpty()
   readonly boardId: number;
@@ -32,9 +34,6 @@ export class CreateColumnDto {
   @ApiProperty({
     example: 1,
   })
-  @IsNumber()
-  readonly userId: number;
-
   @ApiProperty({
     example: new Date(),
   })

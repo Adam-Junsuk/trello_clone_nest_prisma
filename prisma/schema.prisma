@@ -91,8 +91,8 @@ model ColumnUsers {
 model Cards {
   cardId      Int       @id @default(autoincrement())
   ColumnId    Int
-  name        String
-  description String?
+  name        String?
+  description String
   color       String?
   order       Int
   createdAt   DateTime  @default(now())

@@ -47,7 +47,7 @@ export class UsersController {
     }
   }
 
-  @Post('/login')
+  @Post('/logine')
   async login(
     @Res() res: Response,
     @Body() loginDto: UserLoginDto,
