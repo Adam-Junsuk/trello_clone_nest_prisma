@@ -41,7 +41,7 @@ interface RequestWithUser extends Request {
   description: 'Bearer Token for authentication',
 })
 @ApiBearerAuth()
-@ApiResponse({ status: 500, description: '서버에러' })
+@ApiResponse({ status: 500, description: '서버 에러' })
 @UseGuards(JwtAuthGuard)
 @UseFilters(HttpExceptionFilter)
 export class BoardsController {

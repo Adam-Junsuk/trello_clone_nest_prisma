@@ -20,6 +20,8 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
+  ApiOperation,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { ColumnEntity } from './entities/column.entity';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
@@ -33,6 +35,7 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity })
+  @ApiOperation({ summary: '컬럼을 생성' })
   async create(@Body() createColumnDto: CreateColumnDto) {
     const columnEntity = new ColumnEntity(
       await this.columnsService.create(createColumnDto),
@@ -48,6 +51,7 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity, isArray: true })
+  @ApiOperation({ summary: '컬럼 목록을 조회' })
   async findAll() {
     const columns = await this.columnsService.findAll();
     return columns.map((column) => new ColumnEntity(column));
@@ -57,6 +61,7 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: ColumnEntity })
+  @ApiOperation({ summary: '컬럼 상세 조회' })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const columnEntity = new ColumnEntity(
       await this.columnsService.findOne(id),
@@ -72,6 +77,8 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ColumnEntity })
+  @ApiOperation({ summary: '컬럼 내용 수정' })
+  @ApiResponse({ status: 404, description: '해당 칼럼을 찾을 수 없음.' })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateColumnDto: UpdateColumnDto,
@@ -91,6 +98,8 @@ export class ColumnsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: ColumnEntity })
+  @ApiOperation({ summary: '컬럼 삭제' })
+  @ApiResponse({ status: 404, description: '해당 칼럼을 찾을 수 없음.' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     const column = this.columnsService.findOne(id);
     if (!column) {
