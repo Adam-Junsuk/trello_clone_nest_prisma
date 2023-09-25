@@ -21,22 +21,31 @@ import {
   ApiForbiddenResponse,
   ApiResponse,
   ApiTags,
+  ApiOperation,
+  ApiHeader,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CommentEntity } from './entities/comment.entity';
 import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
-
-
 import { Users } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
 interface RequestWithUser extends Request {
   user: Users;
 }
+
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer Token for authentication',
+})
+@ApiBearerAuth()
+@ApiResponse({ status: 500, description: '서버에러' })
 @Controller('cards/:cardId/comments')
 @ApiTags('comments')
 @UseGuards(GoogleOauthGuard)
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  @ApiOperation({ summary: '해당 카드에 있는 댓글 목록 조회' })
   @Get()
   @ApiResponse({ type: CommentEntity, isArray: true })
   async getAllComments() {
@@ -44,6 +53,7 @@ export class CommentsController {
     return comments;
   }
 
+  @ApiOperation({ summary: '댓글 작성' })
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -70,6 +80,7 @@ export class CommentsController {
     return comment;
   }
 
+  @ApiOperation({ summary: '댓글 상세 조회' })
   @Get(':id')
   @ApiResponse({ type: CommentEntity })
   async findOne(@Param('id', ParseIntPipe) id: number) {
@@ -81,6 +92,7 @@ export class CommentsController {
     return comment;
   }
 
+  @ApiOperation({ summary: '댓글 수정' })
   @Patch(':id')
   @ApiResponse({ type: CommentEntity })
   @ApiCreatedResponse({ description: 'successfully updated to a new one!!' })
@@ -99,6 +111,7 @@ export class CommentsController {
     return await this.commentsService.updateComment(+id, updateCommentDto);
   }
 
+  @ApiOperation({ summary: '댓글 삭제' })
   @Delete(':id')
   @ApiResponse({ type: CommentEntity })
   @ApiCreatedResponse({ description: 'Successfully deleted!' })

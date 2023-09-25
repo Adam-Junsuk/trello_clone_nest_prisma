@@ -1,7 +1,6 @@
 //adam/trello_clone_nest_prisma/src/boards/boards.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-//import { Prisma } from '@prisma/client';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
@@ -27,6 +26,7 @@ export class BoardsService {
       select: {
         boardId: true,
         name: true,
+        // CreatorId: true,
       },
     });
   }
@@ -34,16 +34,19 @@ export class BoardsService {
   async createBoard(userId: number, data: CreateBoardDto) {
     return this.prisma.boards.create({
       data: {
-        CreatorId: userId,
         name: data.name,
         backgroundColor: data.backgroundColor,
         description: data.description,
+        Creator: {
+          connect: {
+            userId,
+          },
+        },
       },
     });
   }
 
   async updateBoard(boardId: string, data: UpdateBoardDto) {
-    //data에 { published: true }, where에  { id: Number(id) }들어감
     return this.prisma.boards.update({
       data: {
         name: data.name,

@@ -46,7 +46,7 @@ async function bootstrap() {
   // Enable shutdown hooks for graceful shutdowns
   app.enableShutdownHooks();
 
-  await app.listen(3000);
+  await app.listen(4000);
 }
 
 bootstrap();
