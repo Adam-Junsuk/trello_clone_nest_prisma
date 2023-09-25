@@ -25,6 +25,7 @@ import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AuthService } from 'src/auth-basic/auth.service';
 import { Users } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
 
 interface RequestWithUser extends Request {
   user: Users;
@@ -32,6 +33,7 @@ interface RequestWithUser extends Request {
 
 @Controller('boards')
 @UseFilters(HttpExceptionFilter)
+@UseGuards(GoogleOauthGuard)
 export class BoardsController {
   constructor(
     private readonly boardsService: BoardsService,

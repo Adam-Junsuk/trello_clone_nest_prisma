@@ -1,14 +1,23 @@
-// Users/adam/trello_clone_nest_prisma/src/main.ts
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join, resolve } from 'path';
+import * as dotenv from 'dotenv';
+import session from 'express-session';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+
+
+  app.useStaticAssets(join('..', 'trello_clone_nest_prisma', 'public'));
+  app.setBaseViewsDir(
+    join('..', 'trello_clone_nest_prisma', 'public', 'views'),
+  );
+  app.setViewEngine('hbs');
   // Enable CORS for frontend
   app.enableCors({
     origin: 'http://localhost:3001', // Adjust this to your frontend application's URL
@@ -20,6 +29,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // If you encounter errors, check the 'transform: true' part
 
   // Class serialization settings
+
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   // Swagger settings

@@ -14,6 +14,10 @@ import authConfig from '../config/authConfig'; // 경로를 확인해주세요.
   imports: [
     PrismaModule,
     PassportModule,
+//     JwtModule.register({
+//       secret: jwtSecret,
+//       signOptions: { expiresIn: jwtExpirationTime },
+//     }),
     ConfigModule.forFeature(authConfig), // Import ConfigModule for authConfig
     UsersModule,
     JwtModule.registerAsync({

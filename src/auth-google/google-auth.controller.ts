@@ -4,14 +4,13 @@ import { GoogleOauthGuard } from './google-auth.guard';
 import { JwtAuthService } from './jwt-auth.service';
 
 @Controller('auth/google')
+@UseGuards(GoogleOauthGuard)
 export class GoogleOauthController {
   constructor(private jwtAuthService: JwtAuthService) {}
 
-  @Get()
+  @Get('google')
   @UseGuards(GoogleOauthGuard)
-  async googleAuth(@Req() _req) {
-    // Guard redirects
-  }
+  async googleAuth(@Req() _req) {}
 
   @Get('redirect')
   @UseGuards(GoogleOauthGuard)
