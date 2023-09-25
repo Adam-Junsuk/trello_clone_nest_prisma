@@ -8,7 +8,9 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:server": "nest start",
+    "start:client": "cd /Users/adam/trello_clone_nest_prisma/frontend && PORT=3001 npm start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -71,6 +73,7 @@
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.2.1",
     "dotenv": "^16.3.1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",

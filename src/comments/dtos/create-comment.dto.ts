@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  MaxLength,
-  IsDate,
-} from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCommentDto {
@@ -13,14 +7,6 @@ export class CreateCommentDto {
   @IsString()
   @MaxLength(500)
   content: string;
-
-  @ApiProperty()
-  @IsNumber()
-  cardId: number;
-
-  @ApiProperty()
-  @IsNumber()
-  userId: number;
 
   // @IsDate()
   createdAt: Date;

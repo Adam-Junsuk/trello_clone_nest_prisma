@@ -1,4 +1,4 @@
-// src/main.ts
+// Users/adam/trello_clone_nest_prisma/src/main.ts
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -9,26 +9,20 @@ import { join, resolve } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // path problem
-  // app.useStaticAssets(join(__dirname, '..', 'public'));
-  // app.setBaseViewsDir(join(__dirname, '..', 'public', 'views'));
+  // Enable CORS for frontend
+  app.enableCors({
+    origin: 'http://localhost:3001', // Adjust this to your frontend application's URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
-  // solution1
-  app.useStaticAssets(join('..', 'trello_clone_nest_prisma', 'public'));
-  app.setBaseViewsDir(
-    join('..', 'trello_clone_nest_prisma', 'public', 'views'),
-  );
-  // app.setViewEngine('ejs');
-  app.setViewEngine('hbs');
-  // solution2
-  // app.useStaticAssets(resolve('..', 'public'));
-  // app.setBaseViewsDir(resolve('public', 'views'));
-  // app.setViewEngine('ejs');
+  // Validation and transformation settings
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // If you encounter errors, check the 'transform: true' part
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // /*TODO: Error나면 transform:true 부분을 확인/
+  // Class serialization settings
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  //   app.useGlobalPipes(new ValidationPipe({ transform: true })); // minjung's code
 
+  // Swagger settings
   const config = new DocumentBuilder()
     .setTitle('Trello Clone API')
     .setDescription('The Trello Clone API description')
@@ -38,8 +32,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  // Enable shutdown hooks for graceful shutdowns
   app.enableShutdownHooks();
 
   await app.listen(3000);
 }
+
 bootstrap();
