@@ -22,9 +22,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
-import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
-import { HttpExceptionFilter } from 'src/http-exception.filter'; // minjung's
+// import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth-basic/jwt-auth.guard';
+import { HttpExceptionFilter } from '../http-exception.filter'; // minjung's
 import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
+
 
 @Controller('users')
 @UseFilters(HttpExceptionFilter)

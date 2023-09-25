@@ -9,6 +9,8 @@ import { Request, Response } from 'express';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+    console.log('HttpExceptionFilter: catch 실행', exception.getResponse());
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -27,8 +29,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     } else {
       response.status(status).json({
-        sucess: false,
+        ssuccess: false,
         timestamp: new Date().toISOString(),
+        path: request.url,
         ...error,
       });
     }

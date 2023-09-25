@@ -59,7 +59,9 @@
     "@nestjs/cli": "^10.0.0",
     "@nestjs/passport": "^10.0.2",
     "@nestjs/schematics": "^10.0.0",
-    "@nestjs/testing": "^7.5.5",
+
+    "@nestjs/testing": "^10.2.6",
+
     "@types/bcrypt": "^5.0.0",
     "@types/bcryptjs": "^2.4.4",
     "@types/dotenv": "^8.2.0",

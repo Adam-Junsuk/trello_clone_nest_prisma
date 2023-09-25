@@ -1,6 +1,9 @@
 //adam/trello_clone_nest_prisma/src/boards/boards.service.ts
+
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+
+import { PrismaService } from '../../prisma/prisma.service';
+
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
 
@@ -21,8 +24,11 @@ export class BoardsService {
     });
   }
 
+  // async boards(userId: number) {
   async boards() {
+    console.log('boardsService: boards() 실행');
     return this.prisma.boards.findMany({
+      // where: { CreatorId: userId },
       select: {
         boardId: true,
         name: true,

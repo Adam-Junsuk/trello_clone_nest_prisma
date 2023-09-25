@@ -1,6 +1,8 @@
+// trello_clone_nest_prisma/src/columns/entities/column.entity.ts
 import { Columns } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/users/entities/user.entity';
+// import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 export class ColumnEntity implements Columns {
   @ApiProperty()

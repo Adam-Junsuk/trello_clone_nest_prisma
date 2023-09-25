@@ -25,8 +25,11 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { ColumnEntity } from './entities/column.entity';
-import { JwtAuthGuard } from 'src/auth-basic/jwt-auth.guard';
+
+import { JwtAuthGuard } from '../auth-basic/jwt-auth.guard';
+
 import { GoogleOauthGuard } from 'src/auth-google/google-auth.guard';
+
 import { Users } from '@prisma/client';
 
 interface RequestWithUser extends Request {
