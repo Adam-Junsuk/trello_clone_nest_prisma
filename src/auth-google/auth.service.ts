@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 // import { scrypt as _scrypt } from 'crypto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ApiTags } from '@nestjs/swagger';

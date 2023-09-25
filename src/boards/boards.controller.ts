@@ -1,3 +1,5 @@
+// src/boards/boards.controller.ts
+
 import {
   Body,
   Req,
@@ -37,7 +39,8 @@ export class BoardsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get()
-  async getArticles(@Req() req: RequestWithUser) {
+  async getArticles(
+    @Req() req: RequestWithUser) {
     req.user;
     return this.boardsService.boards();
   }

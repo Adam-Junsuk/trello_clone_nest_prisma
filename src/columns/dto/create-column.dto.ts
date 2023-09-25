@@ -1,3 +1,4 @@
+// trello_clone_nest_prisma/src/columns/dto/create-column.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsString,
@@ -42,7 +43,4 @@ export class CreateColumnDto {
 
   @ApiProperty()
   updatedAt: Date;
-
-  @ApiProperty({ required: false })
-  deletedAt: Date;
 }

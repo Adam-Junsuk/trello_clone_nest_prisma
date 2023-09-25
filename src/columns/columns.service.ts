@@ -3,8 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-
+import { PrismaService } from '../../prisma/prisma.service';
 @Injectable()
 export class ColumnsService {
   constructor(private prisma: PrismaService) {}
@@ -49,7 +48,11 @@ export class ColumnsService {
   // return all columns
   // api/boards/:boardId/columns
   async findAll() {
-    return await this.prisma.columns.findMany();
+    return await this.prisma.columns.findMany({
+      orderBy: {
+        order: 'asc',
+      },
+    });
   }
 
   // return a single column
