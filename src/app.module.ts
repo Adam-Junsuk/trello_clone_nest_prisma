@@ -1,12 +1,10 @@
-import { ConfigModule } from '@nestjs/config';
-import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { BoardsModule } from './boards/boards.module';
 import { CardsModule } from './cards/cards.module';
 import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
-import { NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersModule } from './users-email/users.module';
 import { ColumnsModule } from './columns/columns.module';
 import { AuthModule } from './auth-basic/auth.module';
@@ -19,17 +17,30 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { GoogleStrategy } from './auth-google/google-auth.strategy';
 import { PassportModule } from '@nestjs/passport';
-// import { FacebookStrategy } from './auth-facebook/facebook.strategy';
-// import { KakaoStrategy } from './auth-kakao/kakao-strategy';
+import { SearchService } from './search/search.service';
+import { LoggerMiddleware } from './logger/logger.middleware';
+import { SearchModule } from './search/search.module';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
+    ElasticsearchModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        node:
+          configService.get<string>('ELASTIC_NODE') || 'http://localhost:9200',
+        auth: {
+          username: configService.get<string>('ELASTIC_USERNAME'),
+          password: configService.get<string>('ELASTIC_PASSWORD'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       envFilePath: '../.env',
       load: [emailConfig],
       isGlobal: true,
     }),
-    PrismaModule,
     AuthModule,
     UsersModule,
     Emodule,
@@ -41,22 +52,19 @@ import { PassportModule } from '@nestjs/passport';
     EmailModule,
     LoggingModule,
     PassportModule.register({ defaultStrategy: 'google' }),
+    SearchModule,
   ],
-
   controllers: [AppController],
   providers: [
     PrismaService,
     AppService,
     CommentsService,
     GoogleStrategy,
-    // FacebookStrategy,
-    // KakaoStrategy,
+    SearchService,
   ],
 })
 export class AppModule implements NestModule {
-  //로거미들웨어적용
   configure(consumer: MiddlewareConsumer) {
-    //모듈 데코레이터에는 미들웨어를 위한 장소가 없으므로 configure모듈 클래스의 메서드 사용하여 설정
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

@@ -1,7 +1,6 @@
 //adam/trello_clone_nest_prisma/src/boards/boards.service.ts
 
-import { Injectable } from '@nestjs/common';
-
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -32,24 +31,31 @@ export class BoardsService {
       select: {
         boardId: true,
         name: true,
+        backgroundColor: true,
         // CreatorId: true,
       },
     });
   }
 
   async createBoard(userId: number, data: CreateBoardDto) {
-    return this.prisma.boards.create({
-      data: {
-        name: data.name,
-        backgroundColor: data.backgroundColor,
-        description: data.description,
-        Creator: {
-          connect: {
-            userId,
+    try {
+      return await this.prisma.boards.create({
+        data: {
+          name: data.name,
+          backgroundColor: data.backgroundColor,
+          description: data.description,
+          Creator: {
+            connect: {
+              userId,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        '서비스 - 보드 생성에 실패하였습니다.',
+      );
+    }
   }
 
   async updateBoard(boardId: string, data: UpdateBoardDto) {

@@ -1,13 +1,18 @@
-// /Users/adam/trello_clone_nest_prisma/frontend/src/components/AllBoards.js
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { Link, useNavigate } from 'react-router-dom'; // useNavigate 추가
-import './AllBoards.css'; // CSS 파일 import
+import { Link, useNavigate } from 'react-router-dom';
+import './AllBoards.css';
+import CreateBoard from './CreateBoard';
 
 const AllBoards = () => {
   const [boards, setBoards] = useState([]);
-  const navigate = useNavigate(); // useNavigate 훅을 사용합니다.
-  const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져오기
+  const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   useEffect(() => {
     const fetchBoards = async () => {
@@ -15,7 +20,7 @@ const AllBoards = () => {
         try {
           const response = await api.get('/boards', {
             headers: {
-              Authorization: `Bearer ${token}`, // 토큰을 헤더에 추가
+              Authorization: `Bearer ${token}`,
             },
           });
           setBoards(response.data);
@@ -32,6 +37,7 @@ const AllBoards = () => {
 
   return (
     <>
+      {showModal && <CreateBoard closeModal={toggleModal} />}
       {token ? (
         <ul className="boards-page-board-section-list">
           {boards.map((board) => (
@@ -41,7 +47,8 @@ const AllBoards = () => {
             >
               <Link
                 to={`/boards/${board.boardId}`}
-                className="board-tile mod-light-background"
+                className="board-tile"
+                style={{ backgroundColor: board.backgroundColor }}
               >
                 <div className="board-tile-details is-badged">
                   <div
@@ -59,7 +66,12 @@ const AllBoards = () => {
             data-testid="create-board-tile"
             className="boards-page-board-section-list-item"
           >
-            <div className="board-tile mod-add">
+            <div
+              className="board-tile mod-add"
+              onClick={toggleModal}
+              role="button"
+              tabIndex={0}
+            >
               <p>
                 <span>Create new board</span>
               </p>

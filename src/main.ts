@@ -1,4 +1,4 @@
-//src/main.ts
+// /Users/adam/trello_clone_nest_prisma/src/main.ts
 
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
@@ -10,19 +10,15 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3001', // Adjust this to your frontend application's URL
+    origin: 'http://localhost:3001',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
-  // Validation and transformation settings
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true })); // If you encounter errors, check the 'transform: true' part
-
-  // Class serialization settings
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  // Swagger settings
   const config = new DocumentBuilder()
     .setTitle('Trello Clone API')
     .setDescription('The Trello Clone API description')
@@ -33,7 +29,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Enable shutdown hooks for graceful shutdowns
   app.enableShutdownHooks();
 
   await app.listen(3000);

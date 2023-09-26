@@ -1,3 +1,4 @@
+//Users/adam/trello_clone_nest_prisma/src/cards/cards.controller.ts
 import {
   Controller,
   Post,
@@ -7,16 +8,13 @@ import {
   Param,
   Body,
   NotFoundException,
-  UseGuards,
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { CardDto } from './dto/cards.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-
 @ApiTags('Cards')
 @ApiResponse({ status: 500, description: '서버에러' })
-
 @Controller('columns/:columnId/cards')
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}

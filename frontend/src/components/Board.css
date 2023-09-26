@@ -15,6 +15,7 @@
   -webkit-user-select: none;
   user-select: none;
   white-space: nowrap;
+  margin-top: 60px;
 }
 
 .list-wrapper {
@@ -54,6 +55,10 @@
   width: 100%;
 }
 
+.ist-header js-list-header {
+  border: 10px;
+}
+
 .list {
   background-color: var(--list-background, #ebecf0);
   border-radius: 12px;
@@ -79,6 +84,8 @@
   cursor: pointer;
   display: block;
   margin-bottom: 8px;
+  margin-left: 5px;
+  margin-right: 5px;
   max-width: 300px;
   min-height: 20px;
   position: relative;
@@ -149,4 +156,73 @@
   color: white; /* 글자색을 흰색으로 */
   z-index: 100; /* z-index를 높게 설정 */
   cursor: pointer; /* 마우스 커서를 포인터로 */
+}
+/* Centering the column title */
+.list-header h2.list-header-name-assist {
+  text-align: center;
+}
+
+/* Adjusting the Add Card button */
+.open-card-composer {
+  text-align: center;
+  margin: 8px auto;
+}
+
+/* Adjusting the Add Column button */
+.add-column-wrapper button {
+  margin-top: 10px;
+}
+
+/* Styling for the close card composer button */
+.close-card-composer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 18px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* Styling for card composer controls */
+.cc-controls-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Styling for the card composer textarea */
+.list-card-composer-textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styling for the Add Card button in card composer */
+.nch-button--primary {
+  background-color: #0079bf;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Styling for the Cancel button in card composer */
+.icon-close {
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.cc-controls-section {
+  justify-content: space-between;
+  align-items: center;
 }

@@ -12,7 +12,7 @@
   height: 100px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 02px 02px 10px 10px rgba(0, 0, 0, 0.1);
 }
 
 .board-tile {
@@ -23,14 +23,14 @@
   justify-content: center;
   text-align: center;
   background-color: #0079bf;
-  color: white;
+  color: black;
   font-size: 18px;
   font-weight: bold;
 }
 
 .board-tile.mod-add {
   background-color: #ccc;
-  color: black;
+  color: grey;
 }
 
 .board-tile-details.is-badged {
@@ -38,9 +38,11 @@
 }
 
 .board-tile-details-name {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 /* 새로 추가된 스타일 */
 .center-container {
@@ -62,4 +64,26 @@
 
 .login-button:hover {
   background-color: #005a8e;
+}
+
+/* 기존 CSS에 hover 스타일 추가 */
+.board-tile.mod-add {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.board-tile.mod-add:hover {
+  background-color: #f0f0f0;
+}
+
+.board-tile:hover {
+  background-color: #f0f0f0;
+}
+.board-tile {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.board-tile {
+  /* Your existing styles */
+  text-decoration: none; /* Add this line to remove the underline */
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Board.css';
 import CardDetails from './CardDetails';
 
@@ -14,6 +14,7 @@ const Board = () => {
   const [activeColumnId, setActiveColumnId] = useState(null);
   const [showCardDetails, setShowCardDetails] = useState(false);
   const [activeCardId, setActiveCardId] = useState(null);
+  const navigate = useNavigate(); // useNavigate 추가 추가
 
   useEffect(() => {
     fetchBoard();
@@ -23,6 +24,7 @@ const Board = () => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.log('No access token found.');
+      navigate('/landing'); // 랜딩 페이지로 리디렉션
       return;
     }
 
@@ -93,7 +95,10 @@ const Board = () => {
   };
   //* TO-DO - close card composer 안 보임
   return (
-    <div id="board">
+    <div
+      id="board"
+      style={{ backgroundColor: board ? board.backgroundColor : '#ffffff' }}
+    >
       {board &&
         board.Columns.map((column) => (
           <div className="js-list list-wrapper" key={column.columnId}>

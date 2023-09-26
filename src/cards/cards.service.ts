@@ -1,3 +1,4 @@
+//Users/adam/trello_clone_nest_prisma/src/cards/cards.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -5,25 +6,40 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CardDto } from './dto/cards.dto';
+import { SearchService } from '../search/search.service'; // SearchService import
 
 @Injectable()
 export class CardsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly searchService: SearchService, // SearchService 주입
+  ) {}
 
+  // src/cards/cards.service.ts
   async createCard(columnId: number, data: CardDto) {
     try {
-      console.log(data.description);
-      return await this.prisma.cards.create({
+      const createdCard = await this.prisma.cards.create({
         data: {
           ColumnId: columnId,
-          name: data.name || 'Unnamed Card', // Default name if not provided
+          name: data.name || 'Unnamed Card',
           description: data.description,
           color: data.color || null,
           order: data.order || 0,
         },
       });
+
+      try {
+        const response = await this.searchService.indexCard(createdCard);
+        console.log('Elasticsearch response:', response);
+      } catch (error) {
+        console.error('Elasticsearch index error:', error.message, error.stack);
+        throw new InternalServerErrorException(
+          'Failed to index card in Elasticsearch',
+        );
+      }
+
+      return createdCard;
     } catch (error) {
-      console.log(error.stack);
       if (error.code === 'P2025') {
         throw new NotFoundException('존재하지 않는 컬럼입니다.');
       }

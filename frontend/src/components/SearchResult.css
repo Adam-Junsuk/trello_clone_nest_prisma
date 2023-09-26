@@ -1,0 +1,19 @@
+.search-result-modal {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+  
+  .search-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .search-result-item:hover {
+    background-color: #f0f0f0;
+  }
+  

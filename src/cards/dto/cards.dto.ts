@@ -1,3 +1,5 @@
+//Users/adam/trello_clone_nest_prisma/src/cards/dto/cards.dto.ts
+
 import { IsString, IsOptional } from 'class-validator';
 
 export class CardDto {
