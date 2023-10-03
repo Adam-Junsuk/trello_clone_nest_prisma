@@ -7,6 +7,7 @@
 - 프론트엔드 개발
 - 이메일 토큰 인증 로그인
 - 카드 관련 API 개발
+- Elasticsearch 구현
 
 #### 상세 내용
 
@@ -28,3 +29,8 @@
 - Prisma를 사용하여 데이터베이스와 연동했습니다.
 - [cards.controller.ts 파일 확인하기](https://github.com/Adam-Junsuk/trello_clone_nest_prisma/blob/main/src/cards/cards.controller.ts)
 - [cards.service.ts 파일 확인하기](https://github.com/Adam-Junsuk/trello_clone_nest_prisma/blob/main/src/cards/cards.service.ts)
+
+##### Elasticsearch
+- Elasticsearch를 사용하여 카드의 Name과 Description 검색 기능을 구현했습니다.
+- 검색 쿼리 최적화와 인덱싱을 통해 빠른 검색을 가능하게 했습니다.
+- [search.service.ts 파일 확인하기](https://github.com/Adam-Junsuk/trello_clone_nest_prisma/blob/main/src/search/search.service.ts)
